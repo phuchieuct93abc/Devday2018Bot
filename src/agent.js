@@ -1,3 +1,5 @@
+import * as control from "./control"
+
 export default function(){
     var url="api"
     var $jscomp = $jscomp || {};
@@ -1208,7 +1210,12 @@ export default function(){
         c = this.getSpeech(a.result);
         a.audioDataUri && (c += '<audio hidden id="audio-' + a.id + '" src="' + a.audioDataUri + '"></audio>&nbsp;&nbsp;<i class="fa fa-volume-up" style="cursor: pointer;" onclick="document.getElementById(\'audio-' + a.id + "').play()\"></i>");
         this.domHelper.setContentOnNode(c, b).scrollResultWrapperNodeToBottom();
+        document.getElementById('audio-' + a.id ).addEventListener("ended",function(){
+            control.startRecord();
+
+        })
         document.getElementById('audio-' + a.id ).play();
+       
     }
     ;
     module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$App_App.prototype.generateCallbacksForNode = function(a) {
