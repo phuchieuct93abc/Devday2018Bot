@@ -21,6 +21,7 @@ module.exports = {
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
     compress: true,
+    port:process.env.PORT,
     proxy:{
       '/api': {
         target: "https://console.dialogflow.com/api-client/demo/embedded/616d1a7f-fb60-439c-87fb-012789a05eff",
