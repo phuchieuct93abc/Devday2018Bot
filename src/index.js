@@ -1,8 +1,7 @@
 
 import agen from "./agent"
 import * as control from "./control"
-setTimeout(function(){
 
-    agen();
+window.addEventListener('load', function(){
     control.startRecord();
-},2000)
+}, false )
