@@ -81,11 +81,11 @@
     var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
             window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 
-    if (raf) {
+   /*  if (raf) {
         raf(function() { window.setTimeout(loadDeferredStyles, 0); });
     } else {
         window.addEventListener('load', loadDeferredStyles);
-    }
+    } */
 
     window['addStyleString'] = function(str) {
       var node = document.createElement('style');
@@ -102,7 +102,7 @@
 
 
 <div>
-    <link href="./Book_rom_files/css" rel="stylesheet" type="text/css">
+    <!-- <link href="./Book_rom_files/css" rel="stylesheet" type="text/css">
     <link href="./Book_rom_files/icon" rel="stylesheet">
-    <link href="./Book_rom_files/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="./Book_rom_files/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
 </div><div id="lbdictex_find_popup" class="lbexpopup hidden" style="position: absolute; top: 0px; left: 0px;"><div class="lbexpopup_top"><h2 class="fl popup_title">&nbsp;</h2><ul><li><a class="close_main popup_close" href="https://console.dialogflow.com/api-client/demo/embedded/616d1a7f-fb60-439c-87fb-012789a05eff#">&nbsp;</a></li></ul><div class="clr"></div></div><div class="popup_details"></div><div class="popup_powered">abc</div></div><div id="lbdictex_ask_mark" class="hidden" style="position: absolute; top: 0px; left: 0px;"><a class="lbdictex_ask_select" href="https://console.dialogflow.com/api-client/demo/embedded/616d1a7f-fb60-439c-87fb-012789a05eff#">&nbsp;</a></div></body></html>

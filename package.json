@@ -4,8 +4,7 @@
   "description": "",
   "main": "pacman-server.js",
   "scripts": {
-    "start:dev": "webpack-dev-server",
-    "start:webpack": "webpack"
+    "start": "webpack-dev-server"
   },
   "author": "",
   "license": "ISC",
