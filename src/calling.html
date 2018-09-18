@@ -16,12 +16,17 @@
             width: auto;
         }
     </style>
+    <script>
+    setTimeout(function(){
+        window.location.href = 'bot.html'
+
+    },5000)
+    </script>
 </head>
 
 <body>
     <img src=<%=require("./images/callingBot.png") %> onclick="window.location.href = 'calling.html' "/>
-
-    <div>
-        <h1>Call Lisa</h1>
-    </div>
+    <audio loop="loop" autoplay="autoplay">
+            <source src=<%=require("./images/calling.mp3")%> type="audio/mpeg" />
+        </audio>
 </body>
