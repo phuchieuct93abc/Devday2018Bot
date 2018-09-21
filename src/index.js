@@ -2,12 +2,10 @@
 import "./styles/styles.css"
 import "./styles/main.css"
 import "animate.css"
-import "./agent"
+import "./scripts/agent"
+import * as $ from "jquery"
+import * as control from "./scripts/control"
 
-import * as control from "./control"
-
-window.addEventListener('load', function(){
+$(() => {
     control.startRecord();
-}, false )
-
-
+})

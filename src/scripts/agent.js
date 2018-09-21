@@ -1,5 +1,4 @@
 import * as control from "./control"
-
 var url = "api"
 var $jscomp = $jscomp || {};
 $jscomp.scope = {};
