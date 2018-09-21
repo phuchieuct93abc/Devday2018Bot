@@ -1,7 +1,11 @@
 
-import agen from "./agent"
-import * as control from "./control"
+import "./styles/styles.css"
+import "./styles/main.css"
+import "animate.css"
+import "./scripts/agent"
+import * as $ from "jquery"
+import * as control from "./scripts/control"
 
-window.addEventListener('load', function(){
+$(() => {
     control.startRecord();
-}, false )
+})
