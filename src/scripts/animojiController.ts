@@ -3,6 +3,7 @@ import * as utils from "./util"
 function initAnimojiSource() {
     let anis = new Map()
     anis.set("greeting", "greeting.mp4");
+    anis.set("getName", "getName.mp4");
 
     return anis;
 }

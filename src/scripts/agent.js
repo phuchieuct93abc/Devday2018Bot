@@ -1215,21 +1215,20 @@ module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemo
     let speech = animojiController.parseResponse(a.result.fulfillment.speech);
     let insertingNode = c;
 
-    let paramters = null;
+    let parameters = null;
 
     if(speech.text) {
-        paramters = control.getResult(speech.text);
-        voice.responsiveVoice.speak(speech.text, "US English Male", paramters);
+        parameters = control.getResult(speech.text);
+        voice.responsiveVoice.speak(speech.text, "US English Male", parameters);
         insertingNode = speech.text;
         if(animojiController.animojis.get(speech.id)) {
 
-            insertingNode+='<video src ="' + animojiController.animojis.get(speech.id) +'" autoplay="autoplay"></video>';
+            insertingNode+='<video src ="' + animojiController.animojis.get(speech.id) +'" autoplay="autoplay" muted></video>';
         }
 
     } else {
-        paramters = control.getResult(speech);
-        voice.responsiveVoice.speak(speech, "US English Male", paramters);
-        control.getResult(speech);
+        parameters = control.getResult(speech);
+        voice.responsiveVoice.speak(speech, "US English Male", parameters);
     }
 
 
