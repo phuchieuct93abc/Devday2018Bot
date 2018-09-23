@@ -1011,7 +1011,7 @@ module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemo
 }
     ;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.prototype.scrollResultWrapperNodeToBottom = function () {
-    this.queryResultWrapper.scrollTop = this.queryResultWrapper.scrollHeight;
+    this.queryResultWrapper.scrollTop = this.queryResultWrapper.scrollHeight +2000;
     return this
 }
     ;
@@ -1231,28 +1231,9 @@ module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemo
         voice.responsiveVoice.speak(speech, "US English Male", parameters);
     }
 
-
-
-
-
-
     this.domHelper.setContentOnNode(insertingNode, b).scrollResultWrapperNodeToBottom();
-
-
-
-
 }
 
-function voiceStartCallback() {
-    console.log("Voice started");
-}
-
-function voiceEndCallback() {
-    console.log("Voice ended");
-}
-
-
-    ;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$App_App.prototype.generateCallbacksForNode = function (a) {
     var b = this;
     return {
