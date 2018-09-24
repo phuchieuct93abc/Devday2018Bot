@@ -1,4 +1,4 @@
-import * as control from "./control"
+import * as control from "./scripts/control"
 var url = "api"
 var $jscomp = $jscomp || {};
 $jscomp.scope = {};
