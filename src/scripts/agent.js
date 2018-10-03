@@ -1,6 +1,13 @@
 import * as control from "./control"
+import * as animojiController from "./animojiController"
+import * as voice from "./responsivevoice"
+
+
 var url = "api"
 var $jscomp = $jscomp || {};
+
+
+
 $jscomp.scope = {};
 $jscomp.owns = function (a, b) {
     return Object.prototype.hasOwnProperty.call(a, b)
@@ -930,12 +937,12 @@ goog.UNSEALABLE_CONSTRUCTOR_PROPERTY_ = "goog_defineClass_legacy_unsealable";
  Licensed under the Apache License, Version 2.0 (the "License"); you may not use
  this file except in compliance with the License. You may obtain a copy of the
  License at http://www.apache.org/licenses/LICENSE-2.0
- 
+
  THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
  WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
  MERCHANTABLITY OR NON-INFRINGEMENT.
- 
+
  See the Apache Version 2.0 License for specific language governing permissions
  and limitations under the License.
 */
@@ -1004,7 +1011,7 @@ module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemo
 }
     ;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.prototype.scrollResultWrapperNodeToBottom = function () {
-    this.queryResultWrapper.scrollTop = this.queryResultWrapper.scrollHeight;
+    this.queryResultWrapper.scrollTop = this.queryResultWrapper.scrollHeight +2000;
     return this
 }
     ;
@@ -1204,12 +1211,29 @@ module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemo
     if (!(a.status && a.status.code && a.status.code === module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$App_App.HTTP_STATUS.OK && a.result && a.result))
         return this.handleError(a, b);
     c = this.getSpeech(a.result);
-    a.audioDataUri && (c += '<audio hidden id="audio-' + a.id + '" src="' + a.audioDataUri + '"></audio>&nbsp;&nbsp;<i class="fa fa-volume-up" style="cursor: pointer;" onclick="document.getElementById(\'audio-' + a.id + "').play()\"></i>");
-    this.domHelper.setContentOnNode(c, b).scrollResultWrapperNodeToBottom();
-    control.getResult(a)
 
+    let speech = animojiController.parseResponse(a.result.fulfillment.speech);
+    let insertingNode = c;
+
+    let parameters = null;
+
+    if(speech.text) {
+        parameters = control.getResult(speech.text);
+        voice.responsiveVoice.speak(speech.text, "US English Male", parameters);
+        insertingNode = speech.text;
+        if(animojiController.animojis.get(speech.id)) {
+
+            insertingNode+='<video src ="' + animojiController.animojis.get(speech.id) +'" autoplay="autoplay" muted></video>';
+        }
+
+    } else {
+        parameters = control.getResult(speech);
+        voice.responsiveVoice.speak(speech, "US English Male", parameters);
+    }
+
+    this.domHelper.setContentOnNode(insertingNode, b).scrollResultWrapperNodeToBottom();
 }
-    ;
+
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$App_App.prototype.generateCallbacksForNode = function (a) {
     var b = this;
     return {
@@ -1237,6 +1261,7 @@ module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemo
     var a = function () {
         return Math.floor(65536 * (1 + Math.random())).toString(16).substring(1)
     };
+    console.log(a);
     return a() + a() + "-" + a() + "-" + a() + "-" + a() + "-" + a() + a() + a()
 }
     ;

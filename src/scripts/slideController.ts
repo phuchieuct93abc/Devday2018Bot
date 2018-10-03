@@ -40,8 +40,9 @@ function getAction(speech: string): ACTIONS {
     return ACTIONS.IDLE;
 }
 
-export default function handleSlide(result) {
-    let action: ACTIONS = getAction(result.result.fulfillment.speech);
+export default function handleSlide(speech) {
+    console.log("start handle slide");
+    let action: ACTIONS = getAction(speech);
     switch (action) {
         case ACTIONS.OPEN: openSlide(); break;
         case ACTIONS.NEXT: nextSlide(); break;

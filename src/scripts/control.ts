@@ -2,23 +2,33 @@
 
 import * as $ from "jquery";
 import slideController from "./slideController"
-function playAudio(result) {
-    return new Promise((resolve, reject) => {
-        let audioElement: any = document.getElementById('audio-' + result.id)
-        audioElement.addEventListener("ended", function () {
-            startRecord();
-            resolve(result)
-        })
-        audioElement.play();
 
-    })
-}
 
 export function startRecord() {
     $("#mic").click()
 }
+
+
 export function getResult(result) {
-    playAudio(result).then(result => {
-        slideController(result);
-    })
+
+    var parameters = {
+        onstart: voiceStartCallback,
+        onend: function () {
+            voiceEndCallback(result);
+        }
+    }
+
+    return parameters;
+}
+
+
+
+function voiceStartCallback() {
+    console.log("Voice started");
+}
+
+function voiceEndCallback(result) {
+    console.log("Voice ended");
+    slideController(result);
+    startRecord();
 }
