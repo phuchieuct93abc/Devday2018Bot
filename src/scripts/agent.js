@@ -1,18 +1,28 @@
 import * as control from "./control"
 import * as animojiController from "./animojiController"
 import * as voice from "./responsivevoice"
+import * as $ from "jquery"
+import {initVoiceRecognition} from "./voiceHandler";
 
 
 var url = "api"
-var $jscomp = $jscomp || {};
 
+let voiceData = {
+
+    isVoiceStandby: false,
+    content: "",
+    isIdle: false
+
+}
+
+var $jscomp = $jscomp || {};
 
 
 $jscomp.scope = {};
 $jscomp.owns = function (a, b) {
     return Object.prototype.hasOwnProperty.call(a, b)
 }
-    ;
+;
 $jscomp.assign = "function" == typeof Object.assign ? Object.assign : function (a, b) {
     for (var c = 1; c < arguments.length; c++) {
         var d = arguments[c];
@@ -22,18 +32,18 @@ $jscomp.assign = "function" == typeof Object.assign ? Object.assign : function (
     }
     return a
 }
-    ;
+;
 $jscomp.ASSUME_ES5 = !1;
 $jscomp.ASSUME_NO_NATIVE_MAP = !1;
 $jscomp.ASSUME_NO_NATIVE_SET = !1;
 $jscomp.defineProperty = $jscomp.ASSUME_ES5 || "function" == typeof Object.defineProperties ? Object.defineProperty : function (a, b, c) {
     a != Array.prototype && a != Object.prototype && (a[b] = c.value)
 }
-    ;
+;
 $jscomp.getGlobal = function (a) {
     return "undefined" != typeof window && window === a ? a : "undefined" != typeof global && null != global ? global : a
 }
-    ;
+;
 $jscomp.global = $jscomp.getGlobal(this);
 $jscomp.polyfill = function (a, b) {
     if (b) {
@@ -54,21 +64,23 @@ $jscomp.polyfill = function (a, b) {
         })
     }
 }
-    ;
+;
 $jscomp.polyfill("Object.assign", function (a) {
     return a || $jscomp.assign
 }, "es6", "es3");
 $jscomp.SYMBOL_PREFIX = "jscomp_symbol_";
 $jscomp.initSymbol = function () {
-    $jscomp.initSymbol = function () { }
-        ;
+    $jscomp.initSymbol = function () {
+    }
+    ;
     $jscomp.global.Symbol || ($jscomp.global.Symbol = $jscomp.Symbol)
 }
-    ;
+;
 $jscomp.Symbol = function () {
     function a(a) {
         return $jscomp.SYMBOL_PREFIX + (a || "") + b++
     }
+
     var b = 0;
     return a
 }();
@@ -83,16 +95,18 @@ $jscomp.initSymbolIterator = function () {
             return $jscomp.arrayIterator(this)
         }
     });
-    $jscomp.initSymbolIterator = function () { }
+    $jscomp.initSymbolIterator = function () {
+    }
 }
-    ;
+;
 $jscomp.initSymbolAsyncIterator = function () {
     $jscomp.initSymbol();
     var a = $jscomp.global.Symbol.asyncIterator;
     a || (a = $jscomp.global.Symbol.asyncIterator = $jscomp.global.Symbol("asyncIterator"));
-    $jscomp.initSymbolAsyncIterator = function () { }
+    $jscomp.initSymbolAsyncIterator = function () {
+    }
 }
-    ;
+;
 $jscomp.arrayIterator = function (a) {
     var b = 0;
     return $jscomp.iteratorPrototype(function () {
@@ -100,11 +114,11 @@ $jscomp.arrayIterator = function (a) {
             done: !1,
             value: a[b++]
         } : {
-                done: !0
-            }
+            done: !0
+        }
     })
 }
-    ;
+;
 $jscomp.iteratorPrototype = function (a) {
     $jscomp.initSymbolIterator();
     a = {
@@ -113,27 +127,29 @@ $jscomp.iteratorPrototype = function (a) {
     a[$jscomp.global.Symbol.iterator] = function () {
         return this
     }
-        ;
+    ;
     return a
 }
-    ;
+;
 $jscomp.makeIterator = function (a) {
     $jscomp.initSymbolIterator();
     var b = a[Symbol.iterator];
     return b ? b.call(a) : $jscomp.arrayIterator(a)
 }
-    ;
+;
 $jscomp.FORCE_POLYFILL_PROMISE = !1;
 $jscomp.polyfill("Promise", function (a) {
     function b() {
         this.batch_ = null
     }
+
     function c(a) {
         return a instanceof f ? a : new f(function (b) {
-            b(a)
-        }
+                b(a)
+            }
         )
     }
+
     if (a && !$jscomp.FORCE_POLYFILL_PROMISE)
         return a;
     b.prototype.asyncExecute = function (a) {
@@ -142,19 +158,19 @@ $jscomp.polyfill("Promise", function (a) {
         this.batch_.push(a);
         return this
     }
-        ;
+    ;
     b.prototype.asyncExecuteBatch_ = function () {
         var a = this;
         this.asyncExecuteFunction(function () {
             a.executeBatch_()
         })
     }
-        ;
+    ;
     var d = $jscomp.global.setTimeout;
     b.prototype.asyncExecuteFunction = function (a) {
         d(a, 0)
     }
-        ;
+    ;
     b.prototype.executeBatch_ = function () {
         for (; this.batch_ && this.batch_.length;) {
             var a = this.batch_;
@@ -171,29 +187,29 @@ $jscomp.polyfill("Promise", function (a) {
         }
         this.batch_ = null
     }
-        ;
+    ;
     b.prototype.asyncThrow_ = function (a) {
         this.asyncExecuteFunction(function () {
             throw a;
         })
     }
-        ;
+    ;
     var e = {
         PENDING: 0,
         FULFILLED: 1,
         REJECTED: 2
     }
         , f = function (a) {
-            this.state_ = e.PENDING;
-            this.result_ = void 0;
-            this.onSettledCallbacks_ = [];
-            var b = this.createResolveAndReject_();
-            try {
-                a(b.resolve, b.reject)
-            } catch (l) {
-                b.reject(l)
-            }
-        };
+        this.state_ = e.PENDING;
+        this.result_ = void 0;
+        this.onSettledCallbacks_ = [];
+        var b = this.createResolveAndReject_();
+        try {
+            a(b.resolve, b.reject)
+        } catch (l) {
+            b.reject(l)
+        }
+    };
     f.prototype.createResolveAndReject_ = function () {
         function a(a) {
             return function (d) {
@@ -201,6 +217,7 @@ $jscomp.polyfill("Promise", function (a) {
                     a.call(b, d))
             }
         }
+
         var b = this
             , c = !1;
         return {
@@ -208,7 +225,7 @@ $jscomp.polyfill("Promise", function (a) {
             reject: a(this.reject_)
         }
     }
-        ;
+    ;
     f.prototype.resolveTo_ = function (a) {
         if (a === this)
             this.reject_(new TypeError("A Promise cannot resolve to itself"));
@@ -228,7 +245,7 @@ $jscomp.polyfill("Promise", function (a) {
             b ? this.resolveToNonPromiseObj_(a) : this.fulfill_(a)
         }
     }
-        ;
+    ;
     f.prototype.resolveToNonPromiseObj_ = function (a) {
         var b = void 0;
         try {
@@ -239,15 +256,15 @@ $jscomp.polyfill("Promise", function (a) {
         }
         "function" == typeof b ? this.settleSameAsThenable_(b, a) : this.fulfill_(a)
     }
-        ;
+    ;
     f.prototype.reject_ = function (a) {
         this.settle_(e.REJECTED, a)
     }
-        ;
+    ;
     f.prototype.fulfill_ = function (a) {
         this.settle_(e.FULFILLED, a)
     }
-        ;
+    ;
     f.prototype.settle_ = function (a, b) {
         if (this.state_ != e.PENDING)
             throw Error("Cannot settle(" + a + ", " + b + "): Promise already settled in state" + this.state_);
@@ -255,7 +272,7 @@ $jscomp.polyfill("Promise", function (a) {
         this.result_ = b;
         this.executeOnSettledCallbacks_()
     }
-        ;
+    ;
     f.prototype.executeOnSettledCallbacks_ = function () {
         if (null != this.onSettledCallbacks_) {
             for (var a = 0; a < this.onSettledCallbacks_.length; ++a)
@@ -263,13 +280,13 @@ $jscomp.polyfill("Promise", function (a) {
             this.onSettledCallbacks_ = null
         }
     }
-        ;
+    ;
     var g = new b;
     f.prototype.settleSameAsPromise_ = function (a) {
         var b = this.createResolveAndReject_();
         a.callWhenSettled_(b.resolve, b.reject)
     }
-        ;
+    ;
     f.prototype.settleSameAsThenable_ = function (a, b) {
         var c = this.createResolveAndReject_();
         try {
@@ -278,31 +295,32 @@ $jscomp.polyfill("Promise", function (a) {
             c.reject(k)
         }
     }
-        ;
+    ;
     f.prototype.then = function (a, b) {
         function c(a, b) {
             return "function" == typeof a ? function (b) {
-                try {
-                    d(a(b))
-                } catch (p) {
-                    e(p)
+                    try {
+                        d(a(b))
+                    } catch (p) {
+                        e(p)
+                    }
                 }
-            }
                 : b
         }
+
         var d, e, g = new f(function (a, b) {
-            d = a;
-            e = b
-        }
+                d = a;
+                e = b
+            }
         );
         this.callWhenSettled_(c(a, d), c(b, e));
         return g
     }
-        ;
+    ;
     f.prototype["catch"] = function (a) {
         return this.then(void 0, a)
     }
-        ;
+    ;
     f.prototype.callWhenSettled_ = function (a, b) {
         function c() {
             switch (d.state_) {
@@ -316,49 +334,51 @@ $jscomp.polyfill("Promise", function (a) {
                     throw Error("Unexpected state: " + d.state_);
             }
         }
+
         var d = this;
         null == this.onSettledCallbacks_ ? g.asyncExecute(c) : this.onSettledCallbacks_.push(c)
     }
-        ;
+    ;
     f.resolve = c;
     f.reject = function (a) {
         return new f(function (b, c) {
-            c(a)
-        }
+                c(a)
+            }
         )
     }
-        ;
+    ;
     f.race = function (a) {
         return new f(function (b, d) {
-            for (var e = $jscomp.makeIterator(a), f = e.next(); !f.done; f = e.next())
-                c(f.value).callWhenSettled_(b, d)
-        }
+                for (var e = $jscomp.makeIterator(a), f = e.next(); !f.done; f = e.next())
+                    c(f.value).callWhenSettled_(b, d)
+            }
         )
     }
-        ;
+    ;
     f.all = function (a) {
         var b = $jscomp.makeIterator(a)
             , d = b.next();
         return d.done ? c([]) : new f(function (a, e) {
-            function f(b) {
-                return function (c) {
-                    g[b] = c;
-                    h--;
-                    0 == h && a(g)
+                function f(b) {
+                    return function (c) {
+                        g[b] = c;
+                        h--;
+                        0 == h && a(g)
+                    }
                 }
+
+                var g = []
+                    , h = 0;
+                do
+                    g.push(void 0),
+                        h++ ,
+                        c(d.value).callWhenSettled_(f(g.length - 1), e),
+                        d = b.next();
+                while (!d.done)
             }
-            var g = []
-                , h = 0;
-            do
-                g.push(void 0),
-                    h++ ,
-                    c(d.value).callWhenSettled_(f(g.length - 1), e),
-                    d = b.next();
-            while (!d.done)
-        }
         )
     }
-        ;
+    ;
     return f
 }, "es6", "es3");
 var goog = goog || {};
@@ -366,19 +386,19 @@ goog.global = this;
 goog.isDef = function (a) {
     return void 0 !== a
 }
-    ;
+;
 goog.isString = function (a) {
     return "string" == typeof a
 }
-    ;
+;
 goog.isBoolean = function (a) {
     return "boolean" == typeof a
 }
-    ;
+;
 goog.isNumber = function (a) {
     return "number" == typeof a
 }
-    ;
+;
 goog.exportPath_ = function (a, b, c) {
     a = a.split(".");
     c = c || goog.global;
@@ -386,11 +406,11 @@ goog.exportPath_ = function (a, b, c) {
     for (var d; a.length && (d = a.shift());)
         !a.length && goog.isDef(b) ? c[d] = b : c = c[d] && c[d] !== Object.prototype[d] ? c[d] : c[d] = {}
 }
-    ;
+;
 goog.define = function (a, b) {
     goog.exportPath_(a, b)
 }
-    ;
+;
 goog.DEBUG = !0;
 goog.LOCALE = "en";
 goog.TRUSTED_SITE = !0;
@@ -403,22 +423,22 @@ goog.provide = function (a) {
     goog.isInEs6ModuleLoader_() && goog.logToConsole_("goog.provide should not be used within a module.");
     goog.constructNamespace_(a)
 }
-    ;
+;
 goog.constructNamespace_ = function (a, b) {
     goog.exportPath_(a, b)
 }
-    ;
+;
 goog.getScriptNonce = function () {
     null === goog.cspNonce_ && (goog.cspNonce_ = goog.getScriptNonce_(goog.global.document) || "");
     return goog.cspNonce_
 }
-    ;
+;
 goog.NONCE_PATTERN_ = /^[\w+/_-]+[=]{0,2}$/;
 goog.cspNonce_ = null;
 goog.getScriptNonce_ = function (a) {
     return (a = a.querySelector && a.querySelector("script[nonce]")) && (a = a.nonce || a.getAttribute("nonce")) && goog.NONCE_PATTERN_.test(a) ? a : null
 }
-    ;
+;
 goog.VALID_MODULE_RE_ = /^[a-zA-Z_$][a-zA-Z0-9._$]*$/;
 goog.module = function (a) {
     if (!goog.isString(a) || !a || -1 == a.search(goog.VALID_MODULE_RE_))
@@ -429,15 +449,15 @@ goog.module = function (a) {
         throw Error("goog.module may only be called once per module.");
     goog.moduleLoaderState_.moduleName = a
 }
-    ;
+;
 goog.module.get = function () {
     return null
 }
-    ;
+;
 goog.module.getInternal_ = function () {
     return null
 }
-    ;
+;
 goog.ModuleType = {
     ES6: "es6",
     GOOG: "goog"
@@ -446,20 +466,20 @@ goog.moduleLoaderState_ = null;
 goog.isInModuleLoader_ = function () {
     return goog.isInGoogModuleLoader_() || goog.isInEs6ModuleLoader_()
 }
-    ;
+;
 goog.isInGoogModuleLoader_ = function () {
     return !!goog.moduleLoaderState_ && goog.moduleLoaderState_.type == goog.ModuleType.GOOG
 }
-    ;
+;
 goog.isInEs6ModuleLoader_ = function () {
     var a = !!goog.moduleLoaderState_ && goog.moduleLoaderState_.type == goog.ModuleType.ES6;
     return a ? !0 : (a = goog.global.$jscomp) ? "function" != typeof a.getCurrentModulePath ? !1 : !!a.getCurrentModulePath() : !1
 }
-    ;
+;
 goog.module.declareLegacyNamespace = function () {
     goog.moduleLoaderState_.declareLegacyNamespace = !0
 }
-    ;
+;
 goog.module.declareNamespace = function (a) {
     if (goog.moduleLoaderState_)
         goog.moduleLoaderState_.moduleName = a;
@@ -475,15 +495,16 @@ goog.module.declareNamespace = function (a) {
         }
     }
 }
-    ;
+;
 goog.setTestOnly = function (a) {
     if (goog.DISALLOW_TEST_ONLY_CODE)
         throw a = a || "",
-        Error("Importing test-only code into non-debug environment" + (a ? ": " + a : "."));
+            Error("Importing test-only code into non-debug environment" + (a ? ": " + a : "."));
 }
-    ;
-goog.forwardDeclare = function () { }
-    ;
+;
+goog.forwardDeclare = function () {
+}
+;
 goog.getObjectByName = function (a, b) {
     a = a.split(".");
     b = b || goog.global;
@@ -493,30 +514,33 @@ goog.getObjectByName = function (a, b) {
             return null;
     return b
 }
-    ;
+;
 goog.globalize = function (a, b) {
     b = b || goog.global;
     for (var c in a)
         b[c] = a[c]
 }
-    ;
-goog.addDependency = function () { }
-    ;
+;
+goog.addDependency = function () {
+}
+;
 goog.useStrictRequires = !1;
 goog.ENABLE_DEBUG_LOADER = !0;
 goog.logToConsole_ = function (a) {
     goog.global.console && goog.global.console.error(a)
 }
-    ;
-goog.require = function () { }
-    ;
+;
+goog.require = function () {
+}
+;
 goog.basePath = "";
-goog.nullFunction = function () { }
-    ;
+goog.nullFunction = function () {
+}
+;
 goog.abstractMethod = function () {
     throw Error("unimplemented abstract method");
 }
-    ;
+;
 goog.addSingletonGetter = function (a) {
     a.instance_ = void 0;
     a.getInstance = function () {
@@ -526,7 +550,7 @@ goog.addSingletonGetter = function (a) {
         return a.instance_ = new a
     }
 }
-    ;
+;
 goog.instantiatedSingletons_ = [];
 goog.LOAD_MODULE_USING_EVAL = !0;
 goog.SEAL_MODULE_EXPORTS = goog.DEBUG;
@@ -547,11 +571,11 @@ goog.useSafari10Workaround = function () {
     }
     return goog.hasBadLetScoping
 }
-    ;
+;
 goog.workaroundSafari10EvalBug = function (a) {
     return "(function(){" + a + "\n;})();\n"
 }
-    ;
+;
 goog.loadModule = function (a) {
     var b = goog.moduleLoaderState_;
     try {
@@ -582,20 +606,20 @@ goog.loadModule = function (a) {
         goog.moduleLoaderState_ = b
     }
 }
-    ;
+;
 goog.loadModuleFromSource_ = function (a) {
     var b = {};
     eval(a);
     return b
 }
-    ;
+;
 goog.normalizePath_ = function (a) {
     a = a.split("/");
     for (var b = 0; b < a.length;)
         "." == a[b] ? a.splice(b, 1) : b && ".." == a[b] && a[b - 1] && ".." != a[b - 1] ? a.splice(--b, 2) : b++;
     return a.join("/")
 }
-    ;
+;
 goog.loadFileSync_ = function (a) {
     if (goog.global.CLOSURE_LOAD_FILE_SYNC)
         return goog.global.CLOSURE_LOAD_FILE_SYNC(a);
@@ -608,7 +632,7 @@ goog.loadFileSync_ = function (a) {
         return null
     }
 }
-    ;
+;
 goog.transpile_ = function (a, b, c) {
     var d = goog.global.$jscomp;
     d || (goog.global.$jscomp = d = {});
@@ -618,8 +642,8 @@ goog.transpile_ = function (a, b, c) {
             , g = goog.loadFileSync_(f);
         if (g) {
             (function () {
-                eval(g + "\n//# sourceURL=" + f)
-            }
+                    eval(g + "\n//# sourceURL=" + f)
+                }
             ).call(goog.global);
             if (goog.global.$gwtExport && goog.global.$gwtExport.$jscomp && !goog.global.$gwtExport.$jscomp.transpile)
                 throw Error('The transpiler did not properly export the "transpile" method. $gwtExport: ' + JSON.stringify(goog.global.$gwtExport));
@@ -638,7 +662,7 @@ goog.transpile_ = function (a, b, c) {
     }
     return e(a, b, c)
 }
-    ;
+;
 goog.typeOf = function (a) {
     var b = typeof a;
     if ("object" == b)
@@ -660,52 +684,53 @@ goog.typeOf = function (a) {
         return "object";
     return b
 }
-    ;
+;
 goog.isNull = function (a) {
     return null === a
 }
-    ;
+;
 goog.isDefAndNotNull = function (a) {
     return null != a
 }
-    ;
+;
 goog.isArray = function (a) {
     return "array" == goog.typeOf(a)
 }
-    ;
+;
 goog.isArrayLike = function (a) {
     var b = goog.typeOf(a);
     return "array" == b || "object" == b && "number" == typeof a.length
 }
-    ;
+;
 goog.isDateLike = function (a) {
     return goog.isObject(a) && "function" == typeof a.getFullYear
 }
-    ;
+;
 goog.isFunction = function (a) {
     return "function" == goog.typeOf(a)
 }
-    ;
+;
 goog.isObject = function (a) {
     var b = typeof a;
     return "object" == b && null != a || "function" == b
 }
-    ;
+;
 goog.getUid = function (a) {
     return a[goog.UID_PROPERTY_] || (a[goog.UID_PROPERTY_] = ++goog.uidCounter_)
 }
-    ;
+;
 goog.hasUid = function (a) {
     return !!a[goog.UID_PROPERTY_]
 }
-    ;
+;
 goog.removeUid = function (a) {
     null !== a && "removeAttribute" in a && a.removeAttribute(goog.UID_PROPERTY_);
     try {
         delete a[goog.UID_PROPERTY_]
-    } catch (b) { }
+    } catch (b) {
+    }
 }
-    ;
+;
 goog.UID_PROPERTY_ = "closure_uid_" + (1E9 * Math.random() >>> 0);
 goog.uidCounter_ = 0;
 goog.getHashCode = goog.getUid;
@@ -722,11 +747,11 @@ goog.cloneObject = function (a) {
     }
     return a
 }
-    ;
+;
 goog.bindNative_ = function (a, b, c) {
     return a.call.apply(a.bind, arguments)
 }
-    ;
+;
 goog.bindJs_ = function (a, b, c) {
     if (!a)
         throw Error();
@@ -742,12 +767,12 @@ goog.bindJs_ = function (a, b, c) {
         return a.apply(b, arguments)
     }
 }
-    ;
+;
 goog.bind = function (a, b, c) {
     goog.bind = Function.prototype.bind && -1 != Function.prototype.bind.toString().indexOf("native code") ? goog.bindNative_ : goog.bindJs_;
     return goog.bind.apply(null, arguments)
 }
-    ;
+;
 goog.partial = function (a, b) {
     var c = Array.prototype.slice.call(arguments, 1);
     return function () {
@@ -756,16 +781,16 @@ goog.partial = function (a, b) {
         return a.apply(this, b)
     }
 }
-    ;
+;
 goog.mixin = function (a, b) {
     for (var c in b)
         a[c] = b[c]
 }
-    ;
+;
 goog.now = goog.TRUSTED_SITE && Date.now || function () {
     return +new Date
 }
-    ;
+;
 goog.globalEval = function (a) {
     if (goog.global.execScript)
         goog.global.execScript(a, "JavaScript");
@@ -773,11 +798,13 @@ goog.globalEval = function (a) {
         if (null == goog.evalWorksForGlobals_) {
             try {
                 goog.global.eval("var _evalTest_ = 1;")
-            } catch (d) { }
+            } catch (d) {
+            }
             if ("undefined" != typeof goog.global._evalTest_) {
                 try {
                     delete goog.global._evalTest_
-                } catch (d) { }
+                } catch (d) {
+                }
                 goog.evalWorksForGlobals_ = !0
             } else
                 goog.evalWorksForGlobals_ = !1
@@ -796,7 +823,7 @@ goog.globalEval = function (a) {
     } else
         throw Error("goog.globalEval not available");
 }
-    ;
+;
 goog.evalWorksForGlobals_ = null;
 goog.getCssName = function (a, b) {
     if ("." == String(a).charAt(0))
@@ -805,45 +832,47 @@ goog.getCssName = function (a, b) {
         return goog.cssNameMapping_[a] || a
     }
         , d = function (a) {
-            a = a.split("-");
-            for (var b = [], d = 0; d < a.length; d++)
-                b.push(c(a[d]));
-            return b.join("-")
-        };
+        a = a.split("-");
+        for (var b = [], d = 0; d < a.length; d++)
+            b.push(c(a[d]));
+        return b.join("-")
+    };
     d = goog.cssNameMapping_ ? "BY_WHOLE" == goog.cssNameMappingStyle_ ? c : d : function (a) {
         return a
     }
-        ;
+    ;
     a = b ? a + "-" + d(b) : d(a);
     return goog.global.CLOSURE_CSS_NAME_MAP_FN ? goog.global.CLOSURE_CSS_NAME_MAP_FN(a) : a
 }
-    ;
+;
 goog.setCssNameMapping = function (a, b) {
     goog.cssNameMapping_ = a;
     goog.cssNameMappingStyle_ = b
 }
-    ;
+;
 goog.getMsg = function (a, b) {
     b && (a = a.replace(/\{\$([^}]+)}/g, function (a, d) {
         return null != b && d in b ? b[d] : a
     }));
     return a
 }
-    ;
+;
 goog.getMsgWithFallback = function (a) {
     return a
 }
-    ;
+;
 goog.exportSymbol = function (a, b, c) {
     goog.exportPath_(a, b, c)
 }
-    ;
+;
 goog.exportProperty = function (a, b, c) {
     a[b] = c
 }
-    ;
+;
 goog.inherits = function (a, b) {
-    function c() { }
+    function c() {
+    }
+
     c.prototype = b.prototype;
     a.superClass_ = b.prototype;
     a.prototype = new c;
@@ -854,7 +883,7 @@ goog.inherits = function (a, b) {
         return b.prototype[c].apply(a, d)
     }
 }
-    ;
+;
 goog.base = function (a, b, c) {
     var d = arguments.callee.caller;
     if (goog.STRICT_MODE_COMPATIBLE || goog.DEBUG && !d)
@@ -879,19 +908,19 @@ goog.base = function (a, b, c) {
         return a.constructor.prototype[b].apply(a, e);
     throw Error("goog.base called from a method of one name to a method of a different name");
 }
-    ;
+;
 goog.scope = function (a) {
     if (goog.isInModuleLoader_())
         throw Error("goog.scope is not supported within a module.");
     a.call(goog.global)
 }
-    ;
+;
 goog.defineClass = function (a, b) {
     var c = b.constructor
         , d = b.statics;
     c && c != Object.prototype.constructor || (c = function () {
-        throw Error("cannot instantiate an interface (no constructor defined).");
-    }
+            throw Error("cannot instantiate an interface (no constructor defined).");
+        }
     );
     c = goog.defineClass.createSealingConstructor_(c, a);
     a && goog.inherits(c, a);
@@ -901,36 +930,37 @@ goog.defineClass = function (a, b) {
     null != d && (d instanceof Function ? d(c) : goog.defineClass.applyProperties_(c, d));
     return c
 }
-    ;
+;
 goog.defineClass.SEAL_CLASS_INSTANCES = goog.DEBUG;
 goog.defineClass.createSealingConstructor_ = function (a, b) {
     if (!goog.defineClass.SEAL_CLASS_INSTANCES)
         return a;
     var c = !goog.defineClass.isUnsealable_(b)
         , d = function () {
-            var b = a.apply(this, arguments) || this;
-            b[goog.UID_PROPERTY_] = b[goog.UID_PROPERTY_];
-            this.constructor === d && c && Object.seal instanceof Function && Object.seal(b);
-            return b
-        };
+        var b = a.apply(this, arguments) || this;
+        b[goog.UID_PROPERTY_] = b[goog.UID_PROPERTY_];
+        this.constructor === d && c && Object.seal instanceof Function && Object.seal(b);
+        return b
+    };
     return d
 }
-    ;
+;
 goog.defineClass.isUnsealable_ = function (a) {
     return a && a.prototype && a.prototype[goog.UNSEALABLE_CONSTRUCTOR_PROPERTY_]
 }
-    ;
+;
 goog.defineClass.OBJECT_PROTOTYPE_FIELDS_ = "constructor hasOwnProperty isPrototypeOf propertyIsEnumerable toLocaleString toString valueOf".split(" ");
 goog.defineClass.applyProperties_ = function (a, b) {
     for (var c in b)
         Object.prototype.hasOwnProperty.call(b, c) && (a[c] = b[c]);
     for (var d = 0; d < goog.defineClass.OBJECT_PROTOTYPE_FIELDS_.length; d++)
         c = goog.defineClass.OBJECT_PROTOTYPE_FIELDS_[d],
-            Object.prototype.hasOwnProperty.call(b, c) && (a[c] = b[c])
+        Object.prototype.hasOwnProperty.call(b, c) && (a[c] = b[c])
 }
-    ;
-goog.tagUnsealableClass = function () { }
-    ;
+;
+goog.tagUnsealableClass = function () {
+}
+;
 goog.UNSEALABLE_CONSTRUCTOR_PROPERTY_ = "goog_defineClass_legacy_unsealable";
 /*
  Copyright (c) Microsoft Corporation. All rights reserved.
@@ -959,15 +989,15 @@ var module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agent
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.showNode = function (a) {
     a.style.display = "block"
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.escapeString = function (a) {
     return a && a.toString() ? a.toString().replace(/&/g, "&amp").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#x27;").replace(/\//g, "&#x2F;") : a
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.prototype.checkAvatar = function () {
     "" === window.AGENT_AVATAR_ID && (this.agentAvatar.src = module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.DEFAULT_AVATAR_SRC)
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.prototype.hidePreloader = function () {
     var a = this;
     setTimeout(function () {
@@ -977,12 +1007,12 @@ module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemo
         return a.preloader.style.display = "none"
     }, 500)
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.prototype.setInputValue = function (a) {
     this.queryInput.value = a;
     return this
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.prototype.addUserRequestNode = function (a) {
     var b = this.workplace.createElement("div");
     b.className = module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.CLASS_USER_REQUEST;
@@ -990,7 +1020,7 @@ module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemo
     this.queryResult.appendChild(b);
     return this
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.prototype.generateEmptyServerResponseNode = function () {
     var a = this.workplace.createElement("div");
     a.className = module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.CLASS_SERVER_RESPONSE;
@@ -998,34 +1028,34 @@ module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemo
     this.queryResult.appendChild(a);
     return a
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.prototype.setErrorOnNode = function (a, b) {
     b.innerHTML = a;
     b.className += " " + module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.CLASS_SERVER_RESPONSE_ERROR;
     return b
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.prototype.setContentOnNode = function (a, b) {
     b.innerHTML = a;
     return this
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.prototype.scrollResultWrapperNodeToBottom = function () {
-    this.queryResultWrapper.scrollTop = this.queryResultWrapper.scrollHeight +2000;
+    this.queryResultWrapper.scrollTop = this.queryResultWrapper.scrollHeight + 2000;
     return this
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.prototype.handleStartRecognition = function () {
     this.mic.className += " " + module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.CLASS_MIC_ACTIVE;
     return this
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.prototype.handleStopRecognition = function () {
     var a = new RegExp("(?:^|\\s)" + module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.CLASS_MIC_ACTIVE + "(?!\\S)", "gi");
     this.mic.className = this.mic.className.replace(a, "");
     return this
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.QUERY_INPUT_ID = "query";
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.QUERY_RESULT_ID = "result";
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.QUERY_RESULT_WRAPPER_ID = "resultWrapper";
@@ -1039,68 +1069,70 @@ module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemo
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.DEFAULT_EMPTY_NODE_CONTENT = "...";
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.DEFAULT_AVATAR_SRC = "/api-client/assets/img/logo-short.png";
 var module$exports$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest = {}
-    , module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest_XhrRequest = function () { };
+    ,
+    module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest_XhrRequest = function () {
+    };
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest_XhrRequest.ajax = function (a, b, c, d) {
     c = void 0 === c ? null : c;
     d = void 0 === d ? null : d;
     return new Promise(function (e, f) {
-        var g = module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest_XhrRequest.createXMLHTTPObject()
-            , h = b
-            , m = null;
+            var g = module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest_XhrRequest.createXMLHTTPObject()
+                , h = b
+                , m = null;
 
-        if (c && a === module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest_XhrRequest.Method.GET) {
-            h += "?";
-            var l = 0, k;
-            for (k in c)
-                c.hasOwnProperty(k) && (l++ && (h += "&"),
-                    h += encodeURIComponent(k) + "=" + encodeURIComponent(c[k]))
-        } else
-            c && (d || (d = {}),
-                d["Content-Type"] = "application/json",
-                m = JSON.stringify(c));
+            if (c && a === module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest_XhrRequest.Method.GET) {
+                h += "?";
+                var l = 0, k;
+                for (k in c)
+                    c.hasOwnProperty(k) && (l++ && (h += "&"),
+                        h += encodeURIComponent(k) + "=" + encodeURIComponent(c[k]))
+            } else
+                c && (d || (d = {}),
+                    d["Content-Type"] = "application/json",
+                    m = JSON.stringify(c));
 
-        g.open(a, h);
-        if (d)
-            for (var n in d)
-                d.hasOwnProperty(n) && g.setRequestHeader(n, d[n]);
+            g.open(a, h);
+            if (d)
+                for (var n in d)
+                    d.hasOwnProperty(n) && g.setRequestHeader(n, d[n]);
 
 
-        m ? g.send(m) : g.send();
-        g.onload = function () {
-            200 <= g.status && 300 > g.status ? e(g) : f(g)
-        }
+            m ? g.send(m) : g.send();
+            g.onload = function () {
+                200 <= g.status && 300 > g.status ? e(g) : f(g)
+            }
             ;
-        g.onerror = function () {
-            f(g)
+            g.onerror = function () {
+                f(g)
+            }
         }
-    }
     )
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest_XhrRequest.get = function (a, b, c) {
     b = void 0 === b ? null : b;
     c = void 0 === c ? null : c;
     return module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest_XhrRequest.ajax(module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest_XhrRequest.Method.GET, a, b, c)
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest_XhrRequest.post = function (a, b, c) {
     b = void 0 === b ? null : b;
     c = void 0 === c ? null : c;
     return module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest_XhrRequest.ajax(module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest_XhrRequest.Method.POST, a, b, c)
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest_XhrRequest.put = function (a, b, c) {
     b = void 0 === b ? null : b;
     c = void 0 === c ? null : c;
     return module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest_XhrRequest.ajax(module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest_XhrRequest.Method.PUT, a, b, c)
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest_XhrRequest["delete"] = function (a, b, c) {
     b = void 0 === b ? null : b;
     c = void 0 === c ? null : c;
     return module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest_XhrRequest.ajax(module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest_XhrRequest.Method.DELETE, a, b, c)
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest_XhrRequest.createXMLHTTPObject = function () {
     for (var a = null, b = 0; b < module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest_XhrRequest.XMLHttpFactories.length; b++)
         if (module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest_XhrRequest.XMLHttpFactories.hasOwnProperty(b)) {
@@ -1113,7 +1145,7 @@ module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemo
         }
     return a
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest_XhrRequest.XMLHttpFactories = [function () {
     return new XMLHttpRequest
 }
@@ -1140,13 +1172,13 @@ var module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agent
     this.handleMicClick = function () {
         b.isRecognizing ? b.recognition.stop() : b.recognition.start()
     }
-        ;
+    ;
     this.hanleInputKeyDown = function (a) {
         a.keyCode === module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$App_App.KEY_CODES.ENTER && (a.preventDefault(),
             a.stopPropagation(),
             b.handleInput())
     }
-        ;
+    ;
     this.handleInput = function () {
         var a = b.domHelper.queryInput.value;
         "" !== a.replace(/\s/g, "") && (b.domHelper.addUserRequestNode(module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.escapeString(a)),
@@ -1155,7 +1187,7 @@ var module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agent
             module$exports$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$XhrRequest.XhrRequest.get(module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$App_App.API_URL, b.buildPayLoad(b.domHelper.queryInput.value)).then(a.success, a.error),
             b.domHelper.setInputValue("").scrollResultWrapperNodeToBottom())
     }
-        ;
+    ;
     this.sessionId = this.guid()
 };
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$App_App.prototype.bindEventHandlers = function () {
@@ -1166,41 +1198,21 @@ module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemo
     this.domHelper.checkAvatar();
     this.domHelper.hidePreloader()
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$App_App.prototype.initRecognition = function () {
-    var a = this
-        , b = new webkitSpeechRecognition;
-    b.onstart = function () {
-        a.isRecognizing = !0;
-        a.domHelper.handleStartRecognition()
-    }
-        ;
-    b.onerror = function () { }
-        ;
-    b.onend = function () {
-        a.domHelper.handleStopRecognition();
-        a.isRecognizing = !1
-    }
-        ;
-    b.onresult = function (b) {
-        for (var c = "", e = b.resultIndex; e < b.results.length; ++e)
-            b.results[e].isFinal && (c += b.results[e][0].transcript);
-        a.domHelper.setInputValue(c);
-        a.handleInput()
-    }
-        ;
-    b.lang = window.AGENT_LANGUAGE || "en-US";
-    this.recognition = b
+    this.recognition = initVoiceRecognition(voiceData, this);
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$App_App.prototype.buildPayLoad = function (a) {
     return {
         q: encodeURI(a),
         sessionId: encodeURI(this.sessionId)
     }
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$App_App.prototype.handleResponse = function (a, b) {
+
+
     var c = a.response ? a.response : a.responseText;
     a = null;
     try {
@@ -1217,13 +1229,14 @@ module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemo
 
     let parameters = null;
 
-    if(speech.text) {
+
+    if (speech.text) {
         parameters = control.getResult(speech.text);
         voice.responsiveVoice.speak(speech.text, "US English Male", parameters);
         insertingNode = speech.text;
-        if(animojiController.animojis.get(speech.id)) {
+        if (animojiController.animojis.get(speech.id)) {
 
-            insertingNode+='<video src ="' + animojiController.animojis.get(speech.id) +'" autoplay="autoplay" muted></video>';
+            insertingNode += '<video src ="' + animojiController.animojis.get(speech.id) + '" autoplay="autoplay" muted></video>';
         }
 
     } else {
@@ -1245,18 +1258,18 @@ module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemo
         }
     }
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$App_App.prototype.getSpeech = function (a) {
     a = a.speech || (a.fulfillment ? a.fulfillment.speech : module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$App_App.DEFAULT_NO_ANSWER);
     a || (a = module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$App_App.DEFAULT_NO_ANSWER);
     return module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper.escapeString(a)
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$App_App.prototype.handleError = function (a, b) {
     a = a && a.status && a.status.errorDetails ? a.status.errorDetails : module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$App_App.DEFAULT_ERROR;
     this.domHelper.setErrorOnNode(a, b)
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$App_App.prototype.guid = function () {
     var a = function () {
         return Math.floor(65536 * (1 + Math.random())).toString(16).substring(1)
@@ -1264,7 +1277,7 @@ module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemo
     console.log(a);
     return a() + a() + "-" + a() + "-" + a() + "-" + a() + "-" + a() + a() + a()
 }
-    ;
+;
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$App_App.API_URL = url + "/demoQuery";
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$App_App.DEFAULT_ERROR = "Sorry, it seemed like there was an error during request.";
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$App_App.DEFAULT_NO_ANSWER = "[empty response]";
@@ -1275,7 +1288,8 @@ module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemo
     ENTER: 13
 };
 var module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$main_domHelper = new module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$DomHelper_DomHelper
-    , module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$main_app = new module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$App_App(module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$main_domHelper);
+    ,
+    module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$main_app = new module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$App_App(module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$main_domHelper);
 module$contents$google3$third_party$apiai$ui$legacy$src$main$webapp$js$agentDemoApp$main_app.bindEventHandlers();
 
 
