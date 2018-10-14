@@ -1,81 +1,139 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-
+var path = require('path')
+var webpack = require('webpack')
 var glob = require('glob');
 
-function toObject(paths) {
-    var ret = {};
-    console.log(paths);
 
-    paths.forEach((a) =>{
-        a.forEach((path) =>{
-            ret[path.split('/').slice(-1)[0]] = path;
-            console.log(path);
-        })
+function toObject(paths) {
+  var ret = {};
+  console.log(paths);
+
+  paths.forEach((a) => {
+    a.forEach((path) => {
+      ret[path.split('/').slice(-1)[0]] = path;
+      console.log(path);
     })
-    return ret;
+  })
+  console.log(ret);
+  return ret;
 }
 
 module.exports = {
-    entry: toObject([glob.sync('./src/videos/*.mp4'),glob.sync('./src/index.js')]),
-    output: {
-        path: path.resolve('dist')
-    },
-
-    mode: 'development',
-    module: {
-        rules: [
-            {
-                test: /\.css$/,
-                use: ['style-loader', 'css-loader']
-            },
-            {
-                //IMAGE LOADER
-                test: /\.(jpe?g|png|gif|svg|mp3|mp4|mov)$/i,
-                loader: 'file-loader',
-                options: {
-                    name: '[name].[ext]'
-                }
-            },
-            {
-                test: /\.tsx?$/,
-                use: 'ts-loader',
-                exclude: /node_modules/
-            }
-        ]
-    },
-    resolve: {
-        extensions: ['.tsx', '.ts', '.js']
-    },
-    plugins: [
-        new HtmlWebpackPlugin({
-            filename: "index.html",
-            template: './src/index.html'
-        }),
-        new HtmlWebpackPlugin({
-            filename: "bot.html",
-            template: './src/bot.html'
-        }),
-        new HtmlWebpackPlugin({
-            filename: "calling.html",
-            template: './src/calling.html'
-        })
-    ],
-
-
-    devServer: {
-        contentBase: path.join(__dirname, 'dist'),
-        compress: true,
-        proxy: {
-            '/api': {
-                target: "https://console.dialogflow.com/api-client/demo/embedded/616d1a7f-fb60-439c-87fb-012789a05eff",
-                secure: false,
-                pathRewrite: {'^/api': ''}
-
-
-            }
-
+  entry: toObject([glob.sync('./src/videos/*.mp4'), glob.sync('./src/main.js'),glob.sync('./src/videos/*.mp3')]),
+  output: {
+    path: path.resolve('./dist'),
+    publicPath: '/dist/'
+  },
+  mode: 'development',
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          'vue-style-loader',
+          'css-loader'
+        ],
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          'sass-loader'
+        ],
+      },
+      {
+        test: /\.sass$/,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          'sass-loader?indentedSyntax'
+        ],
+      },
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+        options: {
+          loaders: {
+            // Since sass-loader (weirdly) has SCSS as its default parse mode, we map
+            // the "scss" and "sass" values for the lang attribute to the right configs here.
+            // other preprocessors should work out of the box, no loader config like this necessary.
+            'scss': [
+              'vue-style-loader',
+              'css-loader',
+              'sass-loader'
+            ],
+            'sass': [
+              'vue-style-loader',
+              'css-loader',
+              'sass-loader?indentedSyntax'
+            ]
+          }
+          // other vue-loader options go here
         }
+      },
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/
+      },
+      {
+        test: /\.(png|jpg|gif|svg|mp3|mp4)$/,
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]'
+        }
+      },
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/
+      }
+    ]
+  },
+  resolve: {
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js'
+    },
+    extensions: ['.tsx', '.ts', '.js','.vue']
+  },
+  devServer: {
+    historyApiFallback: true,
+    noInfo: true,
+    overlay: true,
+    proxy: {
+      '/api': {
+        target: "https://console.dialogflow.com/api-client/demo/embedded/616d1a7f-fb60-439c-87fb-012789a05eff",
+        secure: false,
+        pathRewrite: {'^/api': ''}
+
+
+      }
 
     }
-};
+  },
+  performance: {
+    hints: false
+  },
+  devtool: '#eval-source-map'
+}
+
+if (process.env.NODE_ENV === 'production') {
+  module.exports.devtool = '#source-map'
+  // http://vue-loader.vuejs.org/en/workflow/production.html
+  module.exports.plugins = (module.exports.plugins || []).concat([
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: '"production"'
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: true,
+      compress: {
+        warnings: false
+      }
+    }),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true
+    })
+  ])
+}

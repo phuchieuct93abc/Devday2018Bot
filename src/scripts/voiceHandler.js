@@ -10,7 +10,7 @@ export function initVoiceRecognition (voiceData, agent) {
     }
     ;
     speechRecognition.onerror = function (e) {
-        console.error(e);
+        //console.error(e);
     }
     ;
     speechRecognition.onend = function () {

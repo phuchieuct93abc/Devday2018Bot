@@ -3,12 +3,12 @@
 @-webkit-keyframes blink {0%{opacity:1;} 50%{opacity:0;} 100%{opacity:1;}} /* Webkit */
 @-ms-keyframes blink {0%{opacity:1;} 50%{opacity:0;} 100%{opacity:1;}} /* IE */
 @keyframes blink {0%{opacity:1;} 50%{opacity:0;} 100%{opacity:1;}} /* Opera and prob css3 final iteration */
- 
+
 #preloader {
     background: #fff;
     position: fixed;
     top: 0;
-    left: 0; 
+    left: 0;
     height: 100%;
     width: 100%;
     z-index: 999999;
@@ -113,9 +113,6 @@ form {
 .b-agent-demo .b-agent-demo_result {
   overflow-y: auto;
   background: white;
-  position: fixed;
-  top: 110px;
-  bottom: 55px;
   width: 100%;
 }
 .b-agent-demo .b-agent-demo_result-table {

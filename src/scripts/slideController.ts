@@ -1,6 +1,7 @@
 import * as $ from "jquery"
 import * as util from "./util"
 const SLIDE_URL = "https://docs.google.com/presentation/d/1XU-_cIa7NIgExt_zEW0WEDtoPC2daiQ0FBI8Pq8fRnA/present?usp=sharing"
+import * as animojiController from './animojiController.js'
 enum ACTIONS {
     NEXT, BACK, OPEN, IDLE
 }
@@ -15,6 +16,7 @@ function openSlide() {
     let slideElement = $("#slide");
     slideElement.css("display", "block")
     slideElement.addClass('animated slower bounceInUp');
+    animojiController.notify('openSlide');
 }
 
 

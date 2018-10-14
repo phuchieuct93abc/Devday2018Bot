@@ -2,6 +2,7 @@
 
 import * as $ from "jquery";
 import slideController from "./slideController"
+import * as animojiController from "./animojiController"
 
 
 export function startRecord() {
@@ -28,7 +29,7 @@ function voiceStartCallback() {
 }
 
 function voiceEndCallback(result) {
-    console.log("Voice ended");
     slideController(result);
+    animojiController.resetDefaultAnimoji();
     startRecord();
 }
