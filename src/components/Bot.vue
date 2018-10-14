@@ -1,15 +1,16 @@
 <template>
     <div>
 
-        <div class="b-agent-demo">
+        <div class="b-agent-demo" id="b-agent-demo">
+            <div class="animoji" id="animoji" :style="animojiStyle" @click="applyAnimation">
 
-            <div class="animoji" id="animoji" :style="animojiStyle">
+                <video src="/dist/default.mp4" autoplay="autoplay" muted loop id="animojiVideo"></video>
 
-                <video src ="/dist/default.mp4" autoplay="autoplay" muted loop id="animojiVideo"></video>
             </div>
+            <div class="siri-container" id="siri-container"></div>
 
-            <div class="b-agent-demo_result" id="resultWrapper">
-                <table class="b-agent-demo_result-table">
+            <div v-show="false" class="" id="resultWrapper">
+                <table class="">
                     <tbody>
                     <tr>
                         <td id="result"></td>
@@ -17,16 +18,12 @@
                     </tbody>
                 </table>
             </div>
-            <div class="clearfix"></div>
-            <div class="b-agent-demo_input">
-                <form id="agentDemoForm">
-                    <input type="text" name="q" id="query" placeholder="Ask something...">
-                    <i class="b-agent-demo_input-microphone material-icons-extended" id="mic" style="display: block;"
-                       onload="$('#mic').click()">mic</i>
-
-                    <!--div class="b-agent-demo_input-microphone material-icons-extended mic-black" id="mic"></div-->
-                </form>
-            </div>
+            <div class=""></div>
+            <form v-show="false" d="agentDemoForm">
+                <input type="text" name="q" id="query" placeholder="Ask something...">
+                <!--div class="b-agent-demo_input-microphone material-icons-extended mic-black" id="mic"></div-->
+            </form>
+            <i v-show="false" class="" id="mic" style=""></i>
         </div>
 
 
@@ -42,23 +39,45 @@
 
 <script>
 
+    import {SiriWave} from "../scripts/siriwave";
 
     export default {
         name: "Bot",
         data() {
             return {
-                animojiStyle :{
-                    width : "0px"
+                animojiStyle: {
+                    width: "0px"
                 }
             }
         },
         mounted() {
-           var a = document.getElementById("animoji");
-           console.log(a.offsetHeight);
-            this.animojiStyle.width = document.getElementById("animoji").offsetHeight + "px !important";
+
+            var interval = setInterval(() => {
+                var animojiHeight = document.getElementById("animoji").offsetHeight;
+
+                if (animojiHeight != 0) {
+                    this.animojiStyle.width = animojiHeight + "px !important";
+                    clearInterval(interval);
+                }
+                ;
+            }, 500);
+
+
+            var siriWave = new SiriWave({
+                style: 'ios9',
+                container: document.getElementById('siri-container'),
+                autostart: true,
+                speed: 0.1,
+                amplitude: 0.2
+            });
 
         },
 
+        methods: {
+            applyAnimation: () => {
+                document.getElementById("animoji").classList.add("slide-out");
+            }
+        }
 
 
     }
@@ -71,30 +90,84 @@
 
         //justify-content: center;
         flex-direction: column;
-
-        .b-agent-demo_result {
-
-            border: #00a8c6 solid;
-
-            height: 63%;
-        }
+        justify-content: center;
+        align-items: center;
+        background-color: #2b2b2b;
 
         .animoji {
 
-            align-self: center;
             height: 30%;
+            border: #2a2c31;
+            overflow: hidden;
+            border-radius: 50%;
+            box-shadow: 0 10px 150px 80px rgba(0, 0, 0, .5);
+
         }
         video {
             height: 100%;
             width: 100%;
             object-fit: cover;
             z-index: -1;
-         }
+            margin-left: 10px;
+        }
+        .siri-container {
+
+            width: 400px;
+            height: 200px;
+            // background: #000;
+            //border: 1px solid rgba(255, 255, 255, .1);
+            margin: 20px;
+            margin: 0 auto;
+        }
+
+        .slide-out {
+            -moz-animation: slide-out-blurred-tr 1.5s;
+            -webkit-animation: slide-out-blurred-tr 1.5s;
+            -o-animation: slide-out-blurred-tr 1.5s;
+        }
+
+        @-webkit-keyframes slide-out-blurred-tr {
+            0% {
+                -webkit-transform: translate(0, 0) skew(0deg, 0deg);
+                transform: translate(0, 0) skew(0deg, 0deg);
+                -webkit-transform-origin: 50% 50%;
+                transform-origin: 50% 50%;
+                -webkit-filter: blur(0);
+                filter: blur(0);
+                opacity: 1
+            }
+            100% {
+                -webkit-transform: translate(1000px, -1000px) skew(-80deg, -10deg);
+                transform: translate(1000px, -1000px) skew(-80deg, -10deg);
+                -webkit-transform-origin: 0 0;
+                transform-origin: 0 0;
+                -webkit-filter: blur(40px);
+                filter: blur(40px);
+                opacity: 0
+            }
+        }
+        @keyframes slide-out-blurred-tr {
+            0% {
+                -webkit-transform: translate(0, 0) skew(0deg, 0deg);
+                transform: translate(0, 0) skew(0deg, 0deg);
+                -webkit-transform-origin: 50% 50%;
+                transform-origin: 50% 50%;
+                -webkit-filter: blur(0);
+                filter: blur(0);
+                opacity: 1
+            }
+            100% {
+                -webkit-transform: translate(1000px, -1000px) skew(-80deg, -10deg);
+                transform: translate(1000px, -1000px) skew(-80deg, -10deg);
+                -webkit-transform-origin: 0 0;
+                transform-origin: 0 0;
+                -webkit-filter: blur(40px);
+                filter: blur(40px);
+                opacity: 0
+            }
+        }
 
     }
-
-
-
 
 
 </style>

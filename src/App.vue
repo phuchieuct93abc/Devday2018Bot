@@ -3,10 +3,10 @@
 
         <transition name="fade">
 
-            <chat-window v-show="isShowVideoWindow" ></chat-window>
+            <chat-window v-show="isShowVideoWindow"></chat-window>
         </transition>
         <calling :is-show-conversation="isShowConversation"></calling>
-        <bot v-show="isShowConversation && !isShowVideoWindow"></bot>
+        <bot v-show="isShowConversation "></bot>
 
         <iframe style="display:none" id="slide"
                 src="https://docs.google.com/presentation/d/e/2PACX-1vTYiBVS8T_nLVbjwRG7qHtvEqlqeh_icZwXVD3aGtID94Lmv-CQflpvshYdGJkmkst51EaTA7IR-kvD/embed?start=false&loop=false&delayms=3000"
@@ -21,20 +21,19 @@
     import {EventBus} from "./main"
     import ChatWindow from "./components/ChatWindow";
     import * as $ from 'jquery'
+
     export default {
         name: 'app',
         components: {ChatWindow, Calling, Bot},
 
         data() {
             return {
-                isShowConversation : false,
-                isShowVideoWindow : false
+                isShowConversation: false,
+                isShowVideoWindow: false
             }
         },
 
-        methods: {
-
-        },
+        methods: {},
 
         created() {
             EventBus.$on('stopCallingAudio', () => {
@@ -44,8 +43,9 @@
             });
 
             EventBus.$on('openSlide', () => {
+                document.getElementById("animoji").classList.add("slide-out");
                 this.isShowVideoWindow = true;
-               // var a = $("#chatwindow-container").addClass('animated slower bounceInUp');
+                // var a = $("#chatwindow-container").addClass('animated slower bounceInUp');
 
             })
         }
@@ -57,14 +57,16 @@
     iframe {
         height: 100%;
     }
+
     .fade-enter-active, .fade-leave-active {
         transition: opacity 1s;
     }
 
     .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
     {
-        transition:  .6s;
+        transition: .6s;
         opacity: 0;
     }
+
 
 </style>
