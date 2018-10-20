@@ -7,7 +7,11 @@
                 <video src="/dist/default.mp4" autoplay="autoplay" muted loop id="animojiVideo"></video>
 
             </div>
-            <div class="siri-container" id="siri-container"></div>
+            <div class="loading">
+                <div class="loading-gradient" @click="showMic=!showMic" v-if="showMic == true">
+                </div>
+            </div>
+            <div class="siri-container" id="siri-container" v-show="!showMic"></div>
 
             <div v-show="false" class="" id="resultWrapper">
                 <table class="">
@@ -32,6 +36,7 @@
                 href="https://console.dialogflow.com/api-client/demo/embedded/616d1a7f-fb60-439c-87fb-012789a05eff#"></a>
         </div>
 
+
     </div>
 
 
@@ -40,6 +45,7 @@
 <script>
 
     import {SiriWave} from "../scripts/siriwave";
+    import {VoiceListener} from "../main";
 
     export default {
         name: "Bot",
@@ -47,7 +53,8 @@
             return {
                 animojiStyle: {
                     width: "0px"
-                }
+                },
+                showMic: true
             }
         },
         mounted() {
@@ -77,6 +84,15 @@
             applyAnimation: () => {
                 document.getElementById("animoji").classList.add("slide-out");
             }
+        },
+        created () {
+            VoiceListener.$on('onVoiceStart', () => {
+                this.showMic = false;
+            });
+
+            VoiceListener.$on('onVoiceEnd', () => {
+                this.showMic = true ;
+            })
         }
 
 
@@ -101,6 +117,7 @@
             overflow: hidden;
             border-radius: 50%;
             box-shadow: 0 10px 150px 80px rgba(0, 0, 0, .5);
+            margin-bottom: 100px;
 
         }
         video {
@@ -113,11 +130,11 @@
         .siri-container {
 
             width: 400px;
-            height: 200px;
+            height: 60px;
             // background: #000;
             //border: 1px solid rgba(255, 255, 255, .1);
-            margin: 20px;
-            margin: 0 auto;
+            // margin: 20px;
+            // margin: 0 auto;
         }
 
         .slide-out {
@@ -164,6 +181,45 @@
                 -webkit-filter: blur(40px);
                 filter: blur(40px);
                 opacity: 0
+            }
+        }
+
+        .loading {
+           // margin-top: 100px;
+            background-image: url("../images/siri.png");
+            -webkit-background-size: cover;
+            background-size: cover;
+            .loading-gradient {
+                width: 60px;
+                height: 60px;
+                border: 1px solid #ffffff;
+                border-radius: 100%;
+                box-shadow: 0 0 0 2px white inset,
+                0 -5px 20px 5px rgba(255, 0, 0, 0.5) inset,
+                0 0 20px 5px rgba(0, 255, 0, 0.5) inset,
+                0 5px 20px 5px rgba(0, 0, 255, 0.5) inset,
+                0 5px 20px 5px rgba(255, 0, 0, 0.5),
+                0 0 20px 5px rgba(0, 255, 0, 0.5),
+                0 -5px 20px 5px rgba(0, 0, 255, 0.5);
+
+                -webkit-animation: gradient 1s linear infinite;
+
+                @-webkit-keyframes gradient {
+                    0% {
+                        -webkit-transform: rotate(0deg);
+                    }
+                    100% {
+                        -webkit-transform: rotate(360deg);
+                    }
+                }
+                @keyframes gradient {
+                    0% {
+                        -webkit-transform: rotate(0deg);
+                    }
+                    100% {
+                        -webkit-transform: rotate(360deg);
+                    }
+                }
             }
         }
 

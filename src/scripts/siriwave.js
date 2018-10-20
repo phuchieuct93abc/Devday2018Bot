@@ -1,3 +1,5 @@
+
+
 export let SiriWave = (function () {
   'use strict';
 
@@ -677,3 +679,8 @@ export let SiriWave = (function () {
   return SiriWave;
 
 }());
+
+export let siriWave = new SiriWave({
+    style: 'ios9',
+    autostart: true,
+});

@@ -18,6 +18,7 @@ req.keys().forEach(function(key){
 });
 
 export const EventBus = new Vue({});
+export const VoiceListener = new Vue({});
 
 
 new Vue({

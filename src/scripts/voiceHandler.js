@@ -1,3 +1,5 @@
+import {SiriWave} from "./siriwave";
+import {VoiceListener} from "../main";
 export function initVoiceRecognition (voiceData, agent) {
 
     let speechRecognition = new webkitSpeechRecognition();
@@ -6,7 +8,8 @@ export function initVoiceRecognition (voiceData, agent) {
         console.log("---------- on sound starts ");
         voiceData.isVoiceStandby = true;
         agent.isRecognizing = !0;
-        domHelper.handleStartRecognition()
+        domHelper.handleStartRecognition();
+
     }
     ;
     speechRecognition.onerror = function (e) {
@@ -17,6 +20,7 @@ export function initVoiceRecognition (voiceData, agent) {
 
         console.log("---------- on end ");
         domHelper.handleStopRecognition();
+        VoiceListener.$emit('onVoiceEnd');
         agent.isRecognizing = !1;
         if (voiceData.isVoiceStandby) {
             console.log("----------- Idle !!!!");
@@ -35,6 +39,7 @@ export function initVoiceRecognition (voiceData, agent) {
 
     speechRecognition.onsoundstart = function () {
         console.log("---------- on sound start ");
+        VoiceListener.$emit('onVoiceStart');
     }
 
     speechRecognition.onresult = function (event) {
@@ -46,7 +51,7 @@ export function initVoiceRecognition (voiceData, agent) {
         console.log("---------- on result: " + c);
 
         voiceData.content = c;
-        if(voiceData.isIdle && !c.toLowerCase().includes("hey alex")) {
+        if(voiceData.isIdle && !c.toLowerCase().includes("alex")) {
             voiceData.isVoiceStandby = true;
             return;
         }
