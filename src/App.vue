@@ -37,7 +37,7 @@
 
         created() {
             EventBus.$on('stopCallingAudio', () => {
-                console.log("eng calling");
+                console.log("end calling");
                 this.isShowConversation = true;
                 document.getElementById("mic").click();
             });
@@ -47,7 +47,17 @@
                 this.isShowVideoWindow = true;
                 // var a = $("#chatwindow-container").addClass('animated slower bounceInUp');
 
-            })
+            });
+
+            EventBus.$on('callLater', () => {
+                this.isShowVideoWindow = false;
+
+            });
+
+            EventBus.$on('callAlexWhilePresent', () => {
+                this.isShowVideoWindow = true;
+
+            });
         }
     }
 </script>

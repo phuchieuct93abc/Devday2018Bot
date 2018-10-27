@@ -3,6 +3,7 @@
 import * as $ from "jquery";
 import slideController from "./slideController"
 import * as animojiController from "./animojiController"
+import chatWindowController from "./chatWindowController"
 
 
 export function startRecord() {
@@ -10,12 +11,12 @@ export function startRecord() {
 }
 
 
-export function getResult(result) {
+export function getResult(result, id ) {
 
     var parameters = {
         onstart: voiceStartCallback,
         onend: function () {
-            voiceEndCallback(result);
+            voiceEndCallback(result, id);
         }
     }
 
@@ -28,8 +29,9 @@ function voiceStartCallback() {
     console.log("Voice started");
 }
 
-function voiceEndCallback(result) {
+function voiceEndCallback(result, id) {
     slideController(result);
     animojiController.resetDefaultAnimoji();
+    chatWindowController(id);
     startRecord();
 }

@@ -53,7 +53,7 @@ export function getAnimoji(elementId, animojiId, loop) {
 export let animojis = initAnimojiSource();
 
 export function notify(eventId) {
-    EventBus.$emit('openSlide');
+    EventBus.$emit(eventId);
 }
 
 
