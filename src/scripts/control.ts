@@ -30,7 +30,6 @@ export function getResult(result, id) {
 const startAction = {
 
     "greeting": () => {
-        slideControler.nextSlide();
         animojiController.notify('openSlide')
     }
 

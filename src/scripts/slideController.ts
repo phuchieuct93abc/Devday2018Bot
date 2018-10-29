@@ -1,7 +1,5 @@
 import * as $ from "jquery"
 import * as util from "./util"
-const SLIDE_URL = "https://docs.google.com/presentation/d/1XU-_cIa7NIgExt_zEW0WEDtoPC2daiQ0FBI8Pq8fRnA/present?usp=sharing"
-import * as animojiController from './animojiController.js'
 enum ACTIONS {
     NEXT, BACK, OPEN, IDLE
 }
@@ -16,7 +14,6 @@ export function openSlide() {
     let slideElement = $("#slide");
     slideElement.css("display", "block")
     slideElement.addClass('animated slower bounceInUp');
-    //animojiController.notify('openSlide');
 }
 
 
@@ -41,6 +38,7 @@ function getAction(speech: string): ACTIONS {
     }
     return ACTIONS.IDLE;
 }
+
 export function controlSlide(speech) {
     let action: ACTIONS = getAction(speech);
     switch (action) {
@@ -50,3 +48,18 @@ export function controlSlide(speech) {
         default: break;
     }
 }
+//Register onChange slide
+export let onOpenSlideWithBot = new Promise((resolve) => {
+    $(function () {
+        setTimeout(() => {
+            let iframe: any = document.getElementById('slide');
+            let innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+            $(innerDoc).on("keydown click", (event) => {
+                if ($(innerDoc).find("[aria-posinset]").attr("aria-posinset") === '3') {
+                    resolve();
+                }
+            })
+        }, 2000)
+    })
+})
+

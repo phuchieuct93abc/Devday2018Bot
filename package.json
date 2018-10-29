@@ -8,9 +8,10 @@
   "scripts": {
     "dev": "webpack --config webpack.config.js && npm run openchrome && webpack-dev-server --hot --open ",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
-    "openchrome":"open /Applications/Google\\ Chrome.app --args --user-data-dir=\"/var/tmp/Chrome dev session\" --disable-web-security --disable-site-isolation-trials"
+    "openchrome": "open /Applications/Google\\ Chrome.app --args --user-data-dir=\"/var/tmp/Chrome dev session\" --disable-web-security --disable-site-isolation-trials"
   },
   "dependencies": {
+    "@types/jquery": "^3.3.22",
     "animate.css": "^3.7.0",
     "express": "^4.16.3",
     "file-loader": "^2.0.0",

@@ -6,7 +6,7 @@
             <chat-window v-show="isShowVideoWindow"></chat-window>
         </transition>
         <calling :is-show-conversation="isShowConversation"></calling> -->
-        <bot v-show="isShowConversation "></bot>
+        <bot v-show="isShowConversation"></bot>
 
         <iframe id="slide"
                 src="https://docs.google.com/presentation/d/e/2PACX-1vTYiBVS8T_nLVbjwRG7qHtvEqlqeh_icZwXVD3aGtID94Lmv-CQflpvshYdGJkmkst51EaTA7IR-kvD/embed?start=false&loop=false&delayms=3000"
@@ -21,6 +21,7 @@
     import {EventBus} from "./main"
     import ChatWindow from "./components/ChatWindow";
     import * as $ from 'jquery'
+import { onChangeSlide, onOpenSlideWithBot } from './scripts/slideController';
 
     export default {
         name: 'app',
@@ -29,7 +30,8 @@
         data() {
             return {
                 isShowConversation: false,
-                isShowVideoWindow: false
+                isShowVideoWindow: false,
+
             }
         },
 
@@ -37,7 +39,7 @@
         mounted() {
             setTimeout(()=>{
 
-                this.isShowConversation = true;
+               // this.isShowConversation = true;
                                 document.getElementById("mic").click();
             },2000)
         },
@@ -74,6 +76,9 @@
                 this.isShowVideoWindow = true;
 
             });
+           onOpenSlideWithBot.then(()=>{ 
+                this.isShowConversation = true;
+            })
         }
     }
 </script>

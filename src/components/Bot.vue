@@ -111,8 +111,8 @@
         background-color: #2b2b2b;
 
         .animoji {
-            height: 100px;
-            width:100px;
+            height: 300px;
+            width:300px;
             right:400px;
             /* border: #2a2c31; */
             overflow: hidden;
@@ -126,6 +126,8 @@
             &.window{
                 right:10px !important;
                 top:10px !important;
+                width: 100px;
+                height: 100px;
             }
 
         }
@@ -134,7 +136,6 @@
             width: 100%;
             object-fit: cover;
             z-index: -1;
-            margin-left: 10px;
         }
         .siri-container {
 
