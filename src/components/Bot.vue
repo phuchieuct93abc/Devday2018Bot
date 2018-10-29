@@ -2,7 +2,7 @@
     <div>
 
         <div class="b-agent-demo" id="b-agent-demo">
-            <div class="animoji" id="animoji" :style="animojiStyle" @click="applyAnimation">
+            <div class="animoji" id="animoji"  @click="applyAnimation">
 
                 <video src="/dist/default.mp4" autoplay="autoplay" muted loop id="animojiVideo"></video>
 
@@ -51,15 +51,15 @@
         name: "Bot",
         data() {
             return {
-                animojiStyle: {
+               /*  animojiStyle: {
                     width: "0px"
-                },
+                }, */
                 showMic: true
             }
         },
         mounted() {
 
-            var interval = setInterval(() => {
+          /*   var interval = setInterval(() => {
                 var animojiHeight = document.getElementById("animoji").offsetHeight;
 
                 if (animojiHeight != 0) {
@@ -67,7 +67,7 @@
                     clearInterval(interval);
                 }
                 ;
-            }, 500);
+            }, 500); */
 
 
             var siriWave = new SiriWave({
@@ -111,13 +111,22 @@
         background-color: #2b2b2b;
 
         .animoji {
-
-            height: 30%;
-            border: #2a2c31;
+            height: 100px;
+            width:100px;
+            right:400px;
+            /* border: #2a2c31; */
             overflow: hidden;
             border-radius: 50%;
-            box-shadow: 0 10px 150px 80px rgba(0, 0, 0, .5);
-            margin-bottom: 100px;
+            /* box-shadow: 0 10px 150px 80px rgba(0, 0, 0, 0.5); */
+            /* margin-bottom: 100px; */
+            position: fixed;
+            z-index: 99;
+            transition: all 1s linear;
+            
+            &.window{
+                right:10px !important;
+                top:10px !important;
+            }
 
         }
         video {

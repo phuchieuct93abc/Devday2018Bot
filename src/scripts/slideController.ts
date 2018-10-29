@@ -12,20 +12,20 @@ const ACTION_INTENT = [
 
 ]
 
-function openSlide() {
+export function openSlide() {
     let slideElement = $("#slide");
     slideElement.css("display", "block")
     slideElement.addClass('animated slower bounceInUp');
-    animojiController.notify('openSlide');
+    //animojiController.notify('openSlide');
 }
 
 
-function nextSlide() {
+export function nextSlide() {
     let iframe: any = document.getElementById('slide');
     let innerDoc = iframe.contentDocument || iframe.contentWindow.document;
     util.triggerEvent(innerDoc, "keydown", 39)
 }
-function backSlide() {
+export function backSlide() {
     let iframe: any = document.getElementById('slide');
     let innerDoc = iframe.contentDocument || iframe.contentWindow.document;
     util.triggerEvent(innerDoc, "keydown", 37)
@@ -41,9 +41,7 @@ function getAction(speech: string): ACTIONS {
     }
     return ACTIONS.IDLE;
 }
-
-export default function handleSlide(speech) {
-    console.log("start handle slide");
+export function controlSlide(speech) {
     let action: ACTIONS = getAction(speech);
     switch (action) {
         case ACTIONS.OPEN: openSlide(); break;

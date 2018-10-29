@@ -1,7 +1,7 @@
 //open /Applications/Google\ Chrome.app --args --user-data-dir="/var/tmp/Chrome dev session" --disable-web-security --disable-site-isolation-trials
 
 import * as $ from "jquery";
-import slideController from "./slideController"
+import * as slideControler from "./slideController"
 import * as animojiController from "./animojiController"
 import chatWindowController from "./chatWindowController"
 
@@ -11,27 +11,41 @@ export function startRecord() {
 }
 
 
-export function getResult(result, id ) {
+export function getResult(result, id) {
 
     var parameters = {
-        onstart: voiceStartCallback,
-        onend: function () {
+        onstart: () => {
+            voiceStartCallback(result, id);
+        },
+        onend: () => {
             voiceEndCallback(result, id);
-        }
+        },
+
     }
 
     return parameters;
 }
 
 
+const startAction = {
 
-function voiceStartCallback() {
-    console.log("Voice started");
+    "greeting": () => {
+        slideControler.nextSlide();
+        animojiController.notify('openSlide')
+    }
+
 }
 
+function voiceStartCallback(result, id) {
+    startAction[id] && startAction[id]();
+}
+
+
+
 function voiceEndCallback(result, id) {
-    slideController(result);
+    slideControler.controlSlide(result);
     animojiController.resetDefaultAnimoji();
     chatWindowController(id);
     startRecord();
 }
+
