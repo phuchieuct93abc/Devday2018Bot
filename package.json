@@ -6,8 +6,9 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "webpack --config webpack.config.js && webpack-dev-server --hot --open",
-    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+    "dev": "webpack --config webpack.config.js && npm run openchrome && webpack-dev-server --hot --open ",
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "openchrome":"open /Applications/Google\\ Chrome.app --args --user-data-dir=\"/var/tmp/Chrome dev session\" --disable-web-security --disable-site-isolation-trials"
   },
   "dependencies": {
     "animate.css": "^3.7.0",
