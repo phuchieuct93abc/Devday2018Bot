@@ -45,7 +45,7 @@
 <script>
 
     import {SiriWave} from "../scripts/siriwave";
-    import {VoiceListener} from "../main";
+    import {VoiceListener, EventBus} from "../main";
 
     export default {
         name: "Bot",
@@ -68,7 +68,17 @@
                 }
                 ;
             }, 500); */
+            EventBus.$on('anchorMode', () => {
+                let animoji = $("#animoji");
+                let top = $("#animoji").offset().top;
+                let right = $(window).width() - $("#animoji").offset().left - $("#animoji").outerWidth()
 
+                $("#animoji").css({top:top,right:right});
+                setTimeout(()=>{
+
+                    $("#animoji").addClass("window")
+                },500)
+            });
 
             var siriWave = new SiriWave({
                 style: 'ios9',

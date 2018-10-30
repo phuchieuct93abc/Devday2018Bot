@@ -49,17 +49,36 @@ export function controlSlide(speech) {
     }
 }
 //Register onChange slide
-export let onOpenSlideWithBot = new Promise((resolve) => {
-    $(function () {
-        setTimeout(() => {
-            let iframe: any = document.getElementById('slide');
-            let innerDoc = iframe.contentDocument || iframe.contentWindow.document;
-            $(innerDoc).on("keydown click", (event) => {
-                if ($(innerDoc).find("[aria-posinset]").attr("aria-posinset") === '3') {
-                    resolve();
-                }
-            })
-        }, 2000)
+const slideNumberDetection = ()=>{
+    return new Promise(resolve=>{
+        $(function () {
+            setTimeout(() => {
+                let iframe: any = document.getElementById('slide');
+                let innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+                $(innerDoc).on("keydown click", (event) => {
+                        resolve($(innerDoc).find("[aria-posinset]").attr("aria-posinset"));
+                })
+            }, 2000)
+        }) 
     })
+
+}
+export let onOpenSlideWithBot = new Promise((resolve) => {
+    slideNumberDetection().then((slideNumber)=>{
+        console.log("slide number",slideNumber)
+        if(slideNumber == '3'){
+            resolve()
+        }
+    })
+   
+})
+
+export let onOpenSlideWithAnchorMode = new Promise((resolve) => {
+    slideNumberDetection().then((slideNumber)=>{
+        if(slideNumber == '4'){
+            resolve()
+        }
+    })
+   
 })
 

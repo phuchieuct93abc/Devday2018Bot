@@ -21,7 +21,7 @@
     import {EventBus} from "./main"
     import ChatWindow from "./components/ChatWindow";
     import * as $ from 'jquery'
-import { onChangeSlide, onOpenSlideWithBot } from './scripts/slideController';
+import { onChangeSlide, onOpenSlideWithBot, onOpenSlideWithAnchorMode } from './scripts/slideController';
 
     export default {
         name: 'app',
@@ -52,7 +52,7 @@ import { onChangeSlide, onOpenSlideWithBot } from './scripts/slideController';
             });
 
             EventBus.$on('openSlide', () => {
-                let animoji = $("#animoji");
+                /* let animoji = $("#animoji");
                 let top = $("#animoji").offset().top;
                 let right = $(window).width() - $("#animoji").offset().left - $("#animoji").outerWidth()
 
@@ -60,7 +60,7 @@ import { onChangeSlide, onOpenSlideWithBot } from './scripts/slideController';
                 setTimeout(()=>{
 
                     $("#animoji").addClass("window")
-                },500)
+                },500) */
                 // document.getElementById("animoji").classList.add("slide-out");
                 this.isShowVideoWindow = false;
                 // var a = $("#chatwindow-container").addClass('animated slower bounceInUp');
@@ -78,6 +78,10 @@ import { onChangeSlide, onOpenSlideWithBot } from './scripts/slideController';
             });
            onOpenSlideWithBot.then(()=>{ 
                 this.isShowConversation = true;
+            })
+            onOpenSlideWithAnchorMode.then(()=>{
+                console.log("anchor mode")
+                EventBus.$emit("anchorMode")
             })
         }
     }
