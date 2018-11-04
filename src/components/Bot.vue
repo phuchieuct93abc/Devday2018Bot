@@ -2,16 +2,16 @@
     <div>
 
         <div class="b-agent-demo" id="b-agent-demo">
-            <div class="animoji" id="animoji" :style="animojiStyle" @click="applyAnimation">
+            <div class="animoji" id="animoji"  @click="applyAnimation">
 
                 <video src="/dist/default.mp4" autoplay="autoplay" muted loop id="animojiVideo"></video>
 
             </div>
-            <div class="loading">
+            <!-- <div class="loading">
                 <div class="loading-gradient" @click="showMic=!showMic" v-if="showMic == true">
                 </div>
             </div>
-            <div class="siri-container" id="siri-container" v-show="!showMic"></div>
+            <div class="siri-container" id="siri-container" v-show="!showMic"></div> -->
 
             <div v-show="false" class="" id="resultWrapper">
                 <table class="">
@@ -51,32 +51,18 @@
         name: "Bot",
         data() {
             return {
-                animojiStyle: {
-                    width: "0px"
-                },
                 showMic: true
             }
         },
         mounted() {
 
-            var interval = setInterval(() => {
-                var animojiHeight = document.getElementById("animoji").offsetHeight;
-
-                if (animojiHeight != 0) {
-                    this.animojiStyle.width = animojiHeight + "px !important";
-                    clearInterval(interval);
-                }
-                ;
-            }, 500);
-
-
-            var siriWave = new SiriWave({
+         /*    var siriWave = new SiriWave({
                 style: 'ios9',
                 container: document.getElementById('siri-container'),
                 autostart: true,
                 speed: 0.1,
                 amplitude: 0.2
-            });
+            }); */
 
         },
 
@@ -103,21 +89,26 @@
 
     .b-agent-demo {
         display: flex;
-
-        //justify-content: center;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         background-color: #2b2b2b;
 
         .animoji {
-
-            height: 30%;
-            border: #2a2c31;
+            height: 300px;
+            width:300px;
             overflow: hidden;
             border-radius: 50%;
-            box-shadow: 0 10px 150px 80px rgba(0, 0, 0, .5);
-            margin-bottom: 100px;
+            position: fixed;
+            z-index: 99;
+            transition: all 1s linear;
+            
+            &.window{
+                right:10px !important;
+                top:10px !important;
+                width: 100px;
+                height: 100px;;
+            }
 
         }
         video {
@@ -125,16 +116,11 @@
             width: 100%;
             object-fit: cover;
             z-index: -1;
-            margin-left: 10px;
         }
         .siri-container {
-
             width: 400px;
             height: 60px;
-            // background: #000;
-            //border: 1px solid rgba(255, 255, 255, .1);
-            // margin: 20px;
-            // margin: 0 auto;
+            margin-top: 20px;
         }
 
         .slide-out {
@@ -185,10 +171,10 @@
         }
 
         .loading {
-           // margin-top: 100px;
             background-image: url("../images/siri.png");
             -webkit-background-size: cover;
             background-size: cover;
+            margin-top: 200px;
             .loading-gradient {
                 width: 60px;
                 height: 60px;

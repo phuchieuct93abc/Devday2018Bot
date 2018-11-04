@@ -1,13 +1,7 @@
 <template>
     <div id="app">
-
-        <transition name="fade">
-
-            <chat-window v-show="isShowVideoWindow"></chat-window>
-        </transition>
         <calling :is-show-conversation="isShowConversation"></calling>
         <bot v-show="isShowConversation "></bot>
-
         <iframe style="display:none" id="slide"
                 src="https://docs.google.com/presentation/d/e/2PACX-1vTYiBVS8T_nLVbjwRG7qHtvEqlqeh_icZwXVD3aGtID94Lmv-CQflpvshYdGJkmkst51EaTA7IR-kvD/embed?start=false&loop=false&delayms=3000"
                 frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true"
@@ -43,19 +37,18 @@
             });
 
             EventBus.$on('openSlide', () => {
-                document.getElementById("animoji").classList.add("slide-out");
-                this.isShowVideoWindow = true;
-                // var a = $("#chatwindow-container").addClass('animated slower bounceInUp');
 
-            });
+                let animoji = $("#animoji");
+                let top = $("#animoji").offset().top;
+                let right = $(window).width() - $("#animoji").offset().left - $("#animoji").outerWidth()
 
-            EventBus.$on('callLater', () => {
-                this.isShowVideoWindow = false;
+                $("#animoji").css({top:top,right:right});
+                setTimeout(()=>{
 
-            });
+                    $("#animoji").addClass("window")
+                },500)
 
-            EventBus.$on('callAlexWhilePresent', () => {
-                this.isShowVideoWindow = true;
+
 
             });
         }
