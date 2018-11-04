@@ -1,6 +1,13 @@
 import {SiriWave} from "./siriwave";
 import {VoiceListener} from "../main";
-export function initVoiceRecognition (voiceData, agent) {
+
+export let MANUAL_VOICE = {
+    AI_DEF: "Artificial intelligence (AI)  sometimes called machine intelligence, " +
+        "is intelligence demonstrated by machines, " +
+        "in contrast to the natural intelligence displayed by humans and other animals"
+}
+
+export function initVoiceRecognition(voiceData, agent) {
 
     let speechRecognition = new webkitSpeechRecognition();
     let domHelper = agent.domHelper;
@@ -51,7 +58,7 @@ export function initVoiceRecognition (voiceData, agent) {
         console.log("---------- on result: " + c);
 
         voiceData.content = c;
-        if(voiceData.isIdle && !c.toLowerCase().includes("alex")) {
+        if (voiceData.isIdle && !c.toLowerCase().includes("alex")) {
             voiceData.isVoiceStandby = true;
             return;
         }

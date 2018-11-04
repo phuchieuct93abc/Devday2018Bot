@@ -7,7 +7,7 @@
             <!--</div>-->
             <i class="fas fa-phone phone-icon"></i>
         </div>
-
+        <!--isCalling && !isShowConversation-->
 
         <div class="calling-screen" v-if="isCalling && !isShowConversation">
             <img src="../images/callingBot.png"/>
@@ -57,6 +57,9 @@
 
 <style scoped lang="scss">
 
+    .calling-wrapper {
+     //   width: 100%;
+    }
     .phone {
         position: fixed;
         bottom: 30px;

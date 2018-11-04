@@ -1,17 +1,23 @@
 <template>
     <div id="app">
-
-        <transition name="fade">
-
-            <chat-window v-show="isShowVideoWindow"></chat-window>
-        </transition>
         <calling :is-show-conversation="isShowConversation"></calling>
-        <bot v-show="isShowConversation "></bot>
-
+        <bot v-show="isShowConversation " :is-show-animoji="isShowAnimoji"></bot>
         <iframe style="display:none" id="slide"
                 src="https://docs.google.com/presentation/d/e/2PACX-1vTYiBVS8T_nLVbjwRG7qHtvEqlqeh_icZwXVD3aGtID94Lmv-CQflpvshYdGJkmkst51EaTA7IR-kvD/embed?start=false&loop=false&delayms=3000"
                 frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true"
-                webkitallowfullscreen="true"></iframe>
+                webkitallowfullscreen="true">
+
+
+
+        </iframe>
+        <transition name="slide-fade">
+            <div v-if = "isShowAiSearchResult" id="ai-search-result" class="ai-search-result" >
+                <img src="./images/ai-search.png"/>
+
+            </div>
+        </transition>
+
+
     </div>
 </template>
 
@@ -20,7 +26,9 @@
     import Calling from "./components/Calling";
     import {EventBus} from "./main"
     import ChatWindow from "./components/ChatWindow";
-    import * as $ from 'jquery'
+    import * as voiceHandler from "./scripts/voiceHandler"
+    import * as voice from "./scripts/responsivevoice"
+    import * as $ from "jquery"
 
     export default {
         name: 'app',
@@ -29,7 +37,8 @@
         data() {
             return {
                 isShowConversation: false,
-                isShowVideoWindow: false
+                isShowAnimoji: true,
+                isShowAiSearchResult: false
             }
         },
 
@@ -43,21 +52,40 @@
             });
 
             EventBus.$on('openSlide', () => {
-                document.getElementById("animoji").classList.add("slide-out");
-                this.isShowVideoWindow = true;
-                // var a = $("#chatwindow-container").addClass('animated slower bounceInUp');
+
+                let animoji = $("#animoji");
+                let top = $("#animoji").offset().top;
+                let right = $(window).width() - $("#animoji").offset().left - $("#animoji").outerWidth()
+
+                $("#animoji").css({top:top,right:right});
+                setTimeout(()=>{
+
+                    $("#animoji").addClass("window")
+                },500)
+
+
 
             });
 
             EventBus.$on('callLater', () => {
-                this.isShowVideoWindow = false;
+                this.isShowAnimoji = false;
 
             });
 
             EventBus.$on('callAlexWhilePresent', () => {
-                this.isShowVideoWindow = true;
+                this.isShowAnimoji = true;
 
             });
+
+
+            EventBus.$on('showSearchResult', () => {
+                this.isShowAiSearchResult = true;
+                voice.responsiveVoice.speak(voiceHandler.MANUAL_VOICE.AI_DEF, "US English Male");
+            });
+
+            EventBus.$on('closeSearchResult', () => {
+                this.isShowAiSearchResult = false;
+            })
         }
     }
 </script>
@@ -78,5 +106,39 @@
         opacity: 0;
     }
 
+
+    #app {
+        display: flex;
+        height: 100vh;
+        justify-content: center;
+        flex-direction: column;
+    }
+    .ai-search-result {
+        -webkit-background-size: cover;
+        align-self: center;
+        background-size: cover;
+        width: 1200px;
+        height: 400px;
+        z-index: 9999999999999999;
+        padding: 40px;
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 15px;
+        img {
+            height: 100%;
+            width: 100%;
+        }
+    }
+
+    .slide-fade-enter-active {
+        transition: all .8s ease;
+    }
+    .slide-fade-leave-active {
+        transition: all .2s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    }
+    .slide-fade-enter, .slide-fade-leave-to
+        /* .slide-fade-leave-active below version 2.1.8 */ {
+        transform: translateX(10px);
+        opacity: 0;
+    }
 
 </style>
