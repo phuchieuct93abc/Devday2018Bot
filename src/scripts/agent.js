@@ -1234,7 +1234,7 @@ $(document).ready(() => {
 
 
     if (speech.text) {
-      parameters = control.getResult(speech.text, speech.id);
+      parameters = control.getResult(speech.id);
       voice.responsiveVoice.speak(speech.text, "US English Male", parameters);
       insertingNode = speech.text;
       animojiController.getAnimoji("animojiVideo",speech.id, false);

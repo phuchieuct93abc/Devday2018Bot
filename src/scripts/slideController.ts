@@ -7,10 +7,10 @@ enum ACTIONS {
     NEXT, BACK, OPEN, IDLE, SHOW_RESULT
 }
 const ACTION_INTENT = [
-    { name: ACTIONS.OPEN, intent: ["open", "slide"] },
-    { name: ACTIONS.NEXT, intent: ["next", "slide"] },
-    { name: ACTIONS.BACK, intent: ["back", "slide"] },
-    { name: ACTIONS.SHOW_RESULT, intent: ["found"] }
+    { name: ACTIONS.OPEN, intent: ["openSlide"] },
+    { name: ACTIONS.NEXT, intent: ["nextSlide"] },
+    { name: ACTIONS.BACK, intent: ["backSlide"] },
+    { name: ACTIONS.SHOW_RESULT, intent: ["searchResult"] }
 
 ]
 
@@ -38,9 +38,9 @@ function showResult() {
 }
 
 
-function getAction(speech: string): ACTIONS {
+function getAction(id: string): ACTIONS {
     let action = ACTION_INTENT.filter(intent =>
-        intent.intent.every(i => speech.includes(i.toLocaleLowerCase()))
+        intent.intent.every(i => i.includes(id))
     )
     if (action[0]) {
         return action[0].name;

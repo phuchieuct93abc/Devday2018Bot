@@ -11,12 +11,12 @@ export function startRecord() {
 }
 
 
-export function getResult(result, id ) {
+export function getResult(id ) {
 
     var parameters = {
         onstart: voiceStartCallback,
         onend: function () {
-            voiceEndCallback(result, id);
+            voiceEndCallback(id);
         }
     }
 
@@ -29,8 +29,8 @@ function voiceStartCallback() {
     console.log("Voice started");
 }
 
-function voiceEndCallback(result, id) {
-    slideController(result);
+function voiceEndCallback(id) {
+    slideController(id);
     animojiController.resetDefaultAnimoji();
     chatWindowController(id);
     startRecord();
