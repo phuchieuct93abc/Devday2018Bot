@@ -1238,7 +1238,7 @@ $(document).ready(() => {
       voice.responsiveVoice.speak(speech.text, "US English Male", parameters);
       insertingNode = speech.text;
       animojiController.getAnimoji("animojiVideo",speech.id, false);
-      animojiController.getAnimoji("animojiVideoWindow",speech.id, false);
+      //animojiController.getAnimoji("animojiVideoWindow",speech.id, false);
 
     } else {
       parameters = control.getResult(speech);

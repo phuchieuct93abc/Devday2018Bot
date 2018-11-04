@@ -33,7 +33,7 @@ export function parseResponse(speech) {
 export function resetDefaultAnimoji() {
     setTimeout(function() {
         getAnimoji("animojiVideo","default", true);
-        getAnimoji("animojiVideoWindow","default", true);
+        //getAnimoji("animojiVideoWindow","default", true);
     }, 2000);
 
 }

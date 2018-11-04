@@ -2,16 +2,16 @@
     <div>
 
         <div class="b-agent-demo" id="b-agent-demo">
-            <div class="animoji" id="animoji"  @click="applyAnimation">
+            <div class="animoji" id="animoji"  @click="applyAnimation" v-show="isShowAnimoji">
 
                 <video src="/dist/default.mp4" autoplay="autoplay" muted loop id="animojiVideo"></video>
 
             </div>
-            <!-- <div class="loading">
+            <div class="loading">
                 <div class="loading-gradient" @click="showMic=!showMic" v-if="showMic == true">
                 </div>
             </div>
-            <div class="siri-container" id="siri-container" v-show="!showMic"></div> -->
+            <div class="siri-container" id="siri-container" v-show="!showMic"></div>
 
             <div v-show="false" class="" id="resultWrapper">
                 <table class="">
@@ -37,6 +37,10 @@
         </div>
 
 
+
+
+
+
     </div>
 
 
@@ -47,7 +51,12 @@
     import {SiriWave} from "../scripts/siriwave";
     import {VoiceListener} from "../main";
 
+
     export default {
+        props :[
+            'isShowAnimoji'
+
+        ],
         name: "Bot",
         data() {
             return {
@@ -56,13 +65,13 @@
         },
         mounted() {
 
-         /*    var siriWave = new SiriWave({
+         var siriWave = new SiriWave({
                 style: 'ios9',
                 container: document.getElementById('siri-container'),
                 autostart: true,
                 speed: 0.1,
                 amplitude: 0.2
-            }); */
+            });
 
         },
 
@@ -94,15 +103,17 @@
         align-items: center;
         background-color: #2b2b2b;
 
+
         .animoji {
             height: 300px;
-            width:300px;
+            width: 300px;
             overflow: hidden;
             border-radius: 50%;
+            margin-bottom: 50px;
             position: fixed;
             z-index: 99;
             transition: all 1s linear;
-            
+
             &.window{
                 right:10px !important;
                 top:10px !important;
@@ -120,7 +131,6 @@
         .siri-container {
             width: 400px;
             height: 60px;
-            margin-top: 20px;
         }
 
         .slide-out {
@@ -174,7 +184,7 @@
             background-image: url("../images/siri.png");
             -webkit-background-size: cover;
             background-size: cover;
-            margin-top: 200px;
+            margin-top: 450px;
             .loading-gradient {
                 width: 60px;
                 height: 60px;
@@ -208,6 +218,7 @@
                 }
             }
         }
+
 
     }
 
