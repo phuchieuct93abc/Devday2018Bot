@@ -26,6 +26,7 @@
     import Calling from "./components/Calling";
     import {EventBus} from "./main"
     import ChatWindow from "./components/ChatWindow";
+    import * as voiceHandler from "./scripts/voiceHandler"
     import * as voice from "./scripts/responsivevoice"
     import * as $ from "jquery"
 
@@ -79,7 +80,7 @@
 
             EventBus.$on('showSearchResult', () => {
                 this.isShowAiSearchResult = true;
-                voice.responsiveVoice.speak("tin is a handsome ", "US English Male");
+                voice.responsiveVoice.speak(voiceHandler.MANUAL_VOICE.AI_DEF, "US English Male");
             });
 
             EventBus.$on('closeSearchResult', () => {
