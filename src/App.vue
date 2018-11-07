@@ -69,6 +69,7 @@
             });
 
             EventBus.$on('callLater', () => {
+                voiceData.isIdle = true;
                 this.isShowAnimoji = false;
 
             });
@@ -81,12 +82,15 @@
 
             EventBus.$on('showSearchResult', () => {
                 this.isShowAiSearchResult = true;
+                this.isShowAnimoji = true;
                 voiceData.isIdle = true;
                 voice.responsiveVoice.speak(voiceHandler.MANUAL_VOICE.AI_DEF, "US English Male");
             });
 
             EventBus.$on('closeSearchResult', () => {
                 this.isShowAiSearchResult = false;
+                this.isShowAnimoji = false;
+                voiceData.isIdle = true;
             })
         }
     }

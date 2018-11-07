@@ -4,13 +4,14 @@ const SLIDE_URL = "https://docs.google.com/presentation/d/1XU-_cIa7NIgExt_zEW0WE
 import * as animojiController from './animojiController.js'
 import {EventBus} from "../main";
 enum ACTIONS {
-    NEXT, BACK, OPEN, IDLE, SHOW_RESULT
+    NEXT, BACK, OPEN, IDLE, SHOW_RESULT, CLOSE_RESULT
 }
 const ACTION_INTENT = [
     { name: ACTIONS.OPEN, intent: ["openSlide"] },
     { name: ACTIONS.NEXT, intent: ["nextSlide"] },
     { name: ACTIONS.BACK, intent: ["backSlide"] },
-    { name: ACTIONS.SHOW_RESULT, intent: ["searchResult"] }
+    { name: ACTIONS.SHOW_RESULT, intent: ["searchResult"] },
+    { name: ACTIONS.CLOSE_RESULT, intent: ["closeAIResult"] }
 
 ]
 
@@ -37,6 +38,10 @@ function showResult() {
     animojiController.notify("showSearchResult");
 }
 
+function closeResult() {
+    animojiController.notify("closeSearchResult");
+}
+
 
 function getAction(id: string): ACTIONS {
     let action = ACTION_INTENT.filter(intent =>
@@ -56,6 +61,7 @@ export default function handleSlide(speech) {
         case ACTIONS.NEXT: nextSlide(); break;
         case ACTIONS.BACK: backSlide(); break;
         case ACTIONS.SHOW_RESULT: showResult(); break;
+        case ACTIONS.CLOSE_RESULT: closeResult(); break;
         default: break;
     }
 }
