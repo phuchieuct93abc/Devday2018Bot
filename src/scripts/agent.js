@@ -7,7 +7,7 @@ import {initVoiceRecognition} from "./voiceHandler";
 
 var url = "api"
 
-let voiceData = {
+export let voiceData = {
 
   isVoiceStandby: false,
   content: "",

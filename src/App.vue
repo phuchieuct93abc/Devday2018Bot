@@ -29,6 +29,7 @@
     import * as voiceHandler from "./scripts/voiceHandler"
     import * as voice from "./scripts/responsivevoice"
     import * as $ from "jquery"
+    import {voiceData} from "./scripts/agent";
 
     export default {
         name: 'app',
@@ -80,6 +81,7 @@
 
             EventBus.$on('showSearchResult', () => {
                 this.isShowAiSearchResult = true;
+                voiceData.isIdle = true;
                 voice.responsiveVoice.speak(voiceHandler.MANUAL_VOICE.AI_DEF, "US English Male");
             });
 
