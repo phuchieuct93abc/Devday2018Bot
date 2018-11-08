@@ -4,7 +4,8 @@ import {VoiceListener} from "../main";
 export let MANUAL_VOICE = {
     AI_DEF: "Artificial intelligence (AI)  sometimes called machine intelligence, " +
         "is intelligence demonstrated by machines, " +
-        "in contrast to the natural intelligence displayed by humans and other animals"
+        "in contrast to the natural intelligence displayed by humans and other animals. "
+
 }
 
 export function initVoiceRecognition(voiceData, agent) {
@@ -30,8 +31,11 @@ export function initVoiceRecognition(voiceData, agent) {
         VoiceListener.$emit('onVoiceEnd');
         agent.isRecognizing = !1;
         if (voiceData.isVoiceStandby) {
-            console.log("----------- Idle !!!!");
-            voiceData.isIdle = true;
+            if(voiceData.isIdle) {
+                console.log("----------- Idle !!!!");
+            }
+           // console.log("----------- Idle !!!!");
+           // voiceData.isIdle = true;
             speechRecognition.start();
 
         }
