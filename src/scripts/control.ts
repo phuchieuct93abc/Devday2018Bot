@@ -1,7 +1,7 @@
 //open /Applications/Google\ Chrome.app --args --user-data-dir="/var/tmp/Chrome dev session" --disable-web-security --disable-site-isolation-trials
 
 import * as $ from "jquery";
-import {handleSlide} from "./slideController"
+import {navigateSlide} from "./slideController"
 import * as animojiController from "./animojiController"
 import chatWindowController from "./chatWindowController"
 
@@ -30,7 +30,7 @@ function voiceStartCallback() {
 }
 
 function voiceEndCallback(id) {
-    handleSlide(id);
+    navigateSlide(id);
     animojiController.resetDefaultAnimoji();
     chatWindowController(id);
     startRecord();

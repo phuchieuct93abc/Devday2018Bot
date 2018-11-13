@@ -57,7 +57,7 @@ function getAction(id: string): ACTIONS {
 }
 
 
-export function handleSlide(speech) {
+export function navigateSlide(speech) {
     let action: ACTIONS = getAction(speech);
     switch (action) {
         case ACTIONS.OPEN: openSlide(); break;
