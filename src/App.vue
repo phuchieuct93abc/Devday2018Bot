@@ -12,7 +12,7 @@
         </iframe>
         <transition name="slide-fade">
             <div v-if = "isShowAiSearchResult" id="ai-search-result" class="ai-search-result" >
-                <img src="./images/ai-search.png"/>
+                <img src="./images/ai.png"/>
 
             </div>
         </transition>
@@ -123,7 +123,7 @@
         -webkit-background-size: cover;
         align-self: center;
         background-size: cover;
-        width: 1200px;
+        width: 1400px;
         height: 400px;
         z-index: 9999999999999999;
         padding: 40px;

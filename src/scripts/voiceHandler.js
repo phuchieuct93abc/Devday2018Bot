@@ -64,6 +64,7 @@ export function initVoiceRecognition(voiceData, agent) {
         voiceData.content = c;
         if (voiceData.isIdle && !c.toLowerCase().includes("alex")) {
             voiceData.isVoiceStandby = true;
+
             return;
         }
         voiceData.isIdle = false;
