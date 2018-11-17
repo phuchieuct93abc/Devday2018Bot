@@ -1,5 +1,6 @@
 import { SiriWave } from "./siriwave";
 import { VoiceListener } from "../main";
+import voiceTrigger from "./voiceTrigger";
 
 export let MANUAL_VOICE = {
     AI_DEF: "Artificial intelligence (AI)  sometimes called machine intelligence, " +
@@ -13,6 +14,7 @@ export function initVoiceRecognition(voiceData, agent) {
 
     let speechRecognition = new webkitSpeechRecognition();
     let domHelper = agent.domHelper;
+    voiceTrigger.setAgent(agent);
     speechRecognition.onstart = function () {
         console.log("---------- on sound starts ");
         voiceData.isVoiceStandby = true;
