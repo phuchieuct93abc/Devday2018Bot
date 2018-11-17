@@ -18,7 +18,7 @@ function toObject(paths) {
 }
 
 module.exports = {
-  entry: toObject([glob.sync('./src/videos/*.mp4'), glob.sync('./src/main.js'),glob.sync('./src/videos/*.mp3')]),
+  entry: toObject([glob.sync('./src/videos/*.mp4'), glob.sync('./src/main.js'),glob.sync('./src/backup.js'),glob.sync('./src/videos/*.mp3')]),
   output: {
     path: path.resolve('./dist'),
     publicPath: '/dist/'
