@@ -30,6 +30,8 @@
     import * as voice from "./scripts/responsivevoice"
     import * as $ from "jquery"
     import {voiceData} from "./scripts/agent";
+    import io from 'socket.io-client';
+import voiceTrigger from './scripts/voiceTrigger';
 
     export default {
         name: 'app',
@@ -62,7 +64,7 @@
                 setTimeout(()=>{
 
                     $("#animoji").addClass("window")
-                },500)
+                },100)
 
 
 
@@ -92,6 +94,17 @@
                 this.isShowAnimoji = false;
                 voiceData.isIdle = true;
             })
+
+
+
+            const socket = io('http://localhost');
+
+            socket.on('voice', function(data){
+                console.log(data);
+               voiceTrigger.trigger(data.content)
+            });
+
+
         }
     }
 </script>
