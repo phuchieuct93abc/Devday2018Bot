@@ -5,7 +5,7 @@ export let MANUAL_VOICE = {
     AI_DEF: "Artificial intelligence (AI)  sometimes called machine intelligence, " +
         "is intelligence demonstrated by machines, " +
         "in contrast to the natural intelligence displayed by humans and other animals. ",
-    ENDING_SLIDE: "Are you ready for Artificial Intelligence"
+    ENDING_SLIDE: "Are you ready for AI?"
 
 }
 
