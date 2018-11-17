@@ -1,10 +1,11 @@
-import {SiriWave} from "./siriwave";
-import {VoiceListener} from "../main";
+import { SiriWave } from "./siriwave";
+import { VoiceListener } from "../main";
 
 export let MANUAL_VOICE = {
     AI_DEF: "Artificial intelligence (AI)  sometimes called machine intelligence, " +
         "is intelligence demonstrated by machines, " +
-        "in contrast to the natural intelligence displayed by humans and other animals. "
+        "in contrast to the natural intelligence displayed by humans and other animals. ",
+    ENDING_SLIDE: "Are you ready for AI?"
 
 }
 
@@ -19,11 +20,11 @@ export function initVoiceRecognition(voiceData, agent) {
         domHelper.handleStartRecognition();
 
     }
-    ;
+        ;
     speechRecognition.onerror = function (e) {
         //console.error(e);
     }
-    ;
+        ;
     speechRecognition.onend = function () {
 
         console.log("---------- on end ");
@@ -31,11 +32,11 @@ export function initVoiceRecognition(voiceData, agent) {
         VoiceListener.$emit('onVoiceEnd');
         agent.isRecognizing = !1;
         if (voiceData.isVoiceStandby) {
-            if(voiceData.isIdle) {
+            if (voiceData.isIdle) {
                 console.log("----------- Idle !!!!");
             }
-           // console.log("----------- Idle !!!!");
-           // voiceData.isIdle = true;
+            // console.log("----------- Idle !!!!");
+            // voiceData.isIdle = true;
             speechRecognition.start();
 
         }
@@ -71,7 +72,7 @@ export function initVoiceRecognition(voiceData, agent) {
         domHelper.setInputValue(c);
         agent.handleInput()
     }
-    ;
+        ;
     speechRecognition.lang = window.AGENT_LANGUAGE || "en-US";
     return speechRecognition;
 

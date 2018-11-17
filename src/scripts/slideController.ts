@@ -1,8 +1,10 @@
 import * as $ from "jquery"
 import * as util from "./util"
-const SLIDE_URL = "https://docs.google.com/presentation/d/1XU-_cIa7NIgExt_zEW0WEDtoPC2daiQ0FBI8Pq8fRnA/present?usp=sharing"
 import * as animojiController from './animojiController.js'
-import {EventBus} from "../main";
+import * as voice from "./responsivevoice"
+import * as voiceHandler from "./voiceHandler"
+
+const ENDING_SLIDE = '38'
 enum ACTIONS {
     NEXT, BACK, OPEN, IDLE, SHOW_RESULT, CLOSE_RESULT
 }
@@ -19,9 +21,10 @@ function openSlide() {
     let slideElement = $("#slide");
     slideElement.css("display", "block")
     slideElement.addClass('animated slower bounceInUp');
+    $("#slide").focus();
     animojiController.notify('openSlide');
+    slideController.registerSlideChange();
 }
-
 
 function nextSlide() {
     let iframe: any = document.getElementById('slide');
@@ -53,8 +56,8 @@ function getAction(id: string): ACTIONS {
     return ACTIONS.IDLE;
 }
 
-export default function handleSlide(speech) {
-    console.log("start handle slide");
+
+export function navigateSlide(speech) {
     let action: ACTIONS = getAction(speech);
     switch (action) {
         case ACTIONS.OPEN: openSlide(); break;
@@ -65,3 +68,26 @@ export default function handleSlide(speech) {
         default: break;
     }
 }
+
+class SlideController {
+    registerSlideChange() {
+        let iframe: any = document.getElementById('slide');
+        let innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+        $(innerDoc).on("keydown", () => {
+            var slideNumber = $(innerDoc).find("[aria-posinset]").attr("aria-posinset")
+
+            if (slideNumber == ENDING_SLIDE) {
+                animojiController.notify("callAlexWhilePresent");
+                setTimeout(() => {
+                    voice.responsiveVoice.speak(voiceHandler.MANUAL_VOICE.ENDING_SLIDE, "US English Male", { rate: 0.6 });
+                }, 1000);
+            }
+        })
+    }
+
+}
+
+export var slideController = new SlideController();;
+
+
+
