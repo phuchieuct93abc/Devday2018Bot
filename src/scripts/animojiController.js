@@ -3,10 +3,11 @@ import {EventBus} from "../main";
 
 function initAnimojiSource() {
     let anis = new Map()
-    anis.set("greeting", "/dist/greeting.mp4");
-    anis.set("getName", "/dist/getName.mp4");
-    anis.set("default", "/dist/default.mp4")
-
+    anis.set("greeting", "/dist/talking.mp4");
+    anis.set("getName", "/dist/talking.mp4");
+    anis.set("default", "/dist/default.mp4");
+    anis.set("talking", "/dist/talking.mp4");
+    anis.set("dancing", "/dist/dancing.mp4");
     return anis;
 }
 
@@ -44,7 +45,7 @@ export function getAnimoji(elementId, animojiId, loop) {
 
         animojiVideo.src = animojis.get(animojiId);
     } else {
-        animojiVideo.src = animojis.get("default");
+        animojiVideo.src = animojis.get("talking");
     }
     animojiVideo.loop = loop;
 }

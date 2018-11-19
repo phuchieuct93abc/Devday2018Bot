@@ -7,11 +7,7 @@
                 <video src="/dist/default.mp4" autoplay="autoplay" muted loop id="animojiVideo"></video>
 
             </div>
-            <div class="loading">
-                <div class="loading-gradient" @click="showMic=!showMic" v-if="showMic == true">
-                </div>
-            </div>
-            <div class="siri-container" id="siri-container" v-show="!showMic"></div>
+
 
             <div v-show="false" class="" id="resultWrapper">
                 <table class="">
@@ -48,7 +44,7 @@
 
 <script>
 
-    import {SiriWave} from "../scripts/siriwave";
+
     import {VoiceListener} from "../main";
 
 
@@ -65,13 +61,6 @@
         },
         mounted() {
 
-         var siriWave = new SiriWave({
-                style: 'ios9',
-                container: document.getElementById('siri-container'),
-                autostart: true,
-                speed: 0.1,
-                amplitude: 0.2
-            });
 
         },
 

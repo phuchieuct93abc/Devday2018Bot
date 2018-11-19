@@ -12,7 +12,7 @@
         </iframe>
         <transition name="slide-fade">
             <div v-if = "isShowAiSearchResult" id="ai-search-result" class="ai-search-result" >
-                <img src="./images/ai.png"/>
+                <img src="./images/ai-search.png"/>
 
             </div>
         </transition>
@@ -32,6 +32,7 @@
     import {voiceData} from "./scripts/agent";
     import io from 'socket.io-client';
 import voiceTrigger from './scripts/voiceTrigger';
+    import * as animojiController from "./scripts/animojiController";
 
     export default {
         name: 'app',
@@ -42,6 +43,7 @@ import voiceTrigger from './scripts/voiceTrigger';
                 isShowConversation: false,
                 isShowAnimoji: true,
                 isShowAiSearchResult: false
+
             }
         },
 
@@ -95,13 +97,23 @@ import voiceTrigger from './scripts/voiceTrigger';
                 voiceData.isIdle = true;
             })
 
+            EventBus.$on('endPresentation', () => {
+                let slideElement = $("#slide");
+                slideElement.css("display", "none");
+                this.isShowAnimoji = true;
+                $("#animoji").removeClass("window");
+                voiceData.isIdle = true;
+                animojiController.getAnimoji("animojiVideo",'dancing', true);
+            })
+
 
 
             const socket = io('http://localhost');
 
             socket.on('voice', function(data){
                 console.log(data);
-               voiceTrigger.trigger(data.content)
+               voiceTrigger.trigger(data.content);
+                voiceData.isIdle = true;
             });
 
 

@@ -1,4 +1,4 @@
-import { SiriWave } from "./siriwave";
+
 import { VoiceListener } from "../main";
 import voiceTrigger from "./voiceTrigger";
 
