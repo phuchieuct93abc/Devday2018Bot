@@ -17,6 +17,15 @@
             </div>
         </transition>
 
+        <transition name="slide-fade">
+            <div v-show = "isShowTimer" class="timer-wrapper">
+                <iframe
+                        src="http://ipadstopwatch.com/timer-fullscreen.html"
+                       />
+
+            </div>
+        </transition>
+
 
     </div>
 </template>
@@ -42,7 +51,8 @@ import voiceTrigger from './scripts/voiceTrigger';
             return {
                 isShowConversation: false,
                 isShowAnimoji: true,
-                isShowAiSearchResult: false
+                isShowAiSearchResult: false,
+                isShowTimer : false
 
             }
         },
@@ -103,7 +113,15 @@ import voiceTrigger from './scripts/voiceTrigger';
                 this.isShowAnimoji = true;
                 $("#animoji").removeClass("window");
                 voiceData.isIdle = true;
-                animojiController.getAnimoji("animojiVideo",'dancing', true);
+               // animojiController.getAnimoji("animojiVideo",'dancing', true);
+            })
+
+            EventBus.$on('showTimer', () => {
+                this.isShowTimer = true;
+            })
+
+            EventBus.$on('closeTimer', () => {
+                this.isShowTimer = false;
             })
 
 
@@ -157,6 +175,20 @@ import voiceTrigger from './scripts/voiceTrigger';
         img {
             height: 100%;
             width: 100%;
+        }
+    }
+
+    .timer-wrapper {
+        position: relative;
+        margin-top: -90px;
+        height: 100vh;
+        overflow: hidden;
+        iframe {
+            position: absolute;
+            top: 0;
+            left:60%;
+            width: 40%;
+            height: 40%;
         }
     }
 

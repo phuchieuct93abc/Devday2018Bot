@@ -31,7 +31,10 @@ function voiceStartCallback() {
 
 function voiceEndCallback(id) {
     navigateSlide(id);
-    animojiController.resetDefaultAnimoji();
+    if(id!= "dancing") {
+
+        animojiController.resetDefaultAnimoji();
+    }
     chatWindowController(id);
     startRecord();
 }

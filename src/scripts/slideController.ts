@@ -12,7 +12,7 @@ const ENDING_SLIDE = '38'
 const FINISH_PRESENTATION = '45'
 
 enum ACTIONS {
-    NEXT, BACK, OPEN, IDLE, SHOW_RESULT, CLOSE_RESULT
+    NEXT, BACK, OPEN, IDLE, SHOW_RESULT, CLOSE_RESULT, SHOW_TIMER, CLOSE_TIMER,DANCE
 }
 
 const ACTION_INTENT = [
@@ -20,7 +20,10 @@ const ACTION_INTENT = [
     {name: ACTIONS.NEXT, intent: ["nextSlide"]},
     {name: ACTIONS.BACK, intent: ["backSlide"]},
     {name: ACTIONS.SHOW_RESULT, intent: ["searchResult"]},
-    {name: ACTIONS.CLOSE_RESULT, intent: ["closeAIResult"]}
+    {name: ACTIONS.CLOSE_RESULT, intent: ["closeAIResult"]},
+    {name: ACTIONS.SHOW_TIMER, intent: ["showTimer"]},
+    {name: ACTIONS.CLOSE_TIMER, intent: ["closeTimer"]},
+    {name: ACTIONS.DANCE, intent: ["dancing"]}
 
 ]
 
@@ -54,6 +57,19 @@ function closeResult() {
     animojiController.notify("closeSearchResult");
 }
 
+function showTimer() {
+    animojiController.notify("showTimer");
+}
+
+function closeTimer() {
+    animojiController.notify("closeTimer");
+}
+
+function dance() {
+    animojiController.getAnimoji("animojiVideo",'dancing', true);
+}
+
+
 
 function getAction(id: string): ACTIONS {
     let action = ACTION_INTENT.filter(intent =>
@@ -83,6 +99,15 @@ export function navigateSlide(speech) {
             break;
         case ACTIONS.CLOSE_RESULT:
             closeResult();
+            break;
+        case ACTIONS.SHOW_TIMER:
+            showTimer();
+            break;
+        case ACTIONS.CLOSE_TIMER:
+            closeTimer();
+            break;
+        case ACTIONS.DANCE:
+            voiceData.isIdle = true;
             break;
         default:
             break;
