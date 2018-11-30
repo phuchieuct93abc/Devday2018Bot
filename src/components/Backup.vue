@@ -26,8 +26,11 @@
                     "Open slide",
                     "What is AI",
                     "Call you later",
+                    "Good bye",
                     "Hi alex",
-                    "Good bye"
+                    "Close timer",
+                    "Show timer",
+                    "Dancing"
                 ],
                 appendText: ''
             }

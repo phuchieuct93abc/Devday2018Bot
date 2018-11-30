@@ -1,12 +1,13 @@
 <template>
-    <div class="calling-wrapper">
-        <div class="phone" v-if="!isCalling" @click="onCall">
-            <!--<img src="../images/callBtn.png" @click="onCall"/>-->
-            <!--<div>-->
-            <!--<h1>Call Alex</h1>-->
-            <!--</div>-->
-            <i class="fas fa-phone phone-icon"></i>
+    <div class="calling-wrapper" style="height:100%; width:100%; text-align:center">
+        <div class="backdrop" v-if="!isCalling">
+            <img class="background" src="../images/background.jpg" />
+            <img src="../images/backdrop.jpg" />
+            <div class="phone"  @click="onCall">
+                <i class="fas fa-phone phone-icon"></i>
+            </div>
         </div>
+
         <!--isCalling && !isShowConversation-->
 
         <div class="calling-screen" v-if="isCalling && !isShowConversation">
@@ -41,7 +42,7 @@
                 this.isCalling = !this.isCalling;
 
                 setTimeout(() => {
-                    this.stopAudio();
+                   this.stopAudio();
                 }, 5000)
 
                 this.callingAudio.play();
@@ -56,10 +57,6 @@
 </script>
 
 <style scoped lang="scss">
-
-    .calling-wrapper {
-     //   width: 100%;
-    }
     .phone {
         position: fixed;
         bottom: 30px;
@@ -86,13 +83,21 @@
         }
 
     }
+    .background{
+        width: 100% !important;
+        height: 100% !important;
+        position: fixed;
+        z-index: -1;
+    }
+    .calling-screen{
+        background-color: #2c2d35 !important;
 
-    .calling-screen {
+    }
+    .calling-screen,.backdrop {
         display: flex;
         align-items: center;
         justify-content: center;
         flex-direction: column;
-        background-color: #2c2d35 !important;
         img {
             height: 100vh;
             width: auto;
