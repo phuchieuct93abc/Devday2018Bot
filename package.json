@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "npm-run-all --parallel start run",
     "openchrome": "open /Applications/Google\\ Chrome.app --args --user-data-dir=\"/var/tmp/Chrome dev session\" --disable-web-security --disable-site-isolation-trials",
-    "start": "webpack --config webpack.config.js && npm run openchrome && webpack-dev-server --hot --open --host localhost&& nodemon index",
+    "start": "webpack --config webpack.config.js && npm run openchrome && webpack-dev-server --hot&& nodemon index",
     "run": "nodemon index"
   },
   "dependencies": {
