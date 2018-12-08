@@ -8,6 +8,7 @@ function initAnimojiSource() {
     anis.set("default", "/dist/default.mp4");
     anis.set("talking", "/dist/talking.mp4");
     anis.set("dancing", "/dist/dancing.mp4");
+    anis.set("feeling", "/dist/talking.mp4");
     return anis;
 }
 

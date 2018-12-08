@@ -167,7 +167,6 @@ import voiceTrigger from './scripts/voiceTrigger';
         align-self: center;
         background-size: cover;
         width: 1400px;
-        height: 400px;
         z-index: 9999999999999999;
         padding: 40px;
         background-color: rgba(0, 0, 0, 0.2);

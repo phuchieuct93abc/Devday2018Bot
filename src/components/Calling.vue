@@ -1,5 +1,5 @@
 <template>
-    <div class="calling-wrapper" style="height:100%; width:100%; text-align:center">
+    <div class="calling-wrapper">
         <div class="backdrop" v-if="!isCalling">
             <img class="background" src="../images/background.jpg" />
             <img src="../images/backdrop.jpg" />
